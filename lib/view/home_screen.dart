@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Text("\$${product.price.toStringAsFixed(2)}",
-                style: const TextStyle(color: Colors.blue)),
+                style: const TextStyle(color: Colors.red)),
             Text("⭐ ${product.rating}"),
             const SizedBox(height: 5),
             SizedBox(
