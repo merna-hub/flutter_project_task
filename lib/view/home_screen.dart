@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_project_task/view/cart_screen.dart';
 import '../Controller/product_controller.dart';
@@ -12,6 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> images = [
+    'assets/images/zara.png',
+    'assets/images/hm.png',
+    'assets/images/lacoste.png',
+    'assets/images/pullbear.png',
+    'assets/images/ralph.png',
+    'assets/images/lacoste.png',
+    'assets/images/pullbear.png',
+    'assets/images/ralph.png',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +42,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+
     if (productController.errorMessage != null) {
       return Scaffold(
         body: Center(child: Text(productController.errorMessage!)),
@@ -43,47 +56,45 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            const Icon(Icons.store, color: Colors.blue, size: 28),
-            const SizedBox(width: 8),
+            Image.asset('assets/images/logo.png', height: 30.h),
+            SizedBox(width: 8.w),
             const Text(
               "Modee",
               style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ],
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              // search
-            },
+            onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.black),
+            icon: const Icon(Icons.card_travel, color: Colors.black),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const HomePage ()),
+                MaterialPageRoute(builder: (_) => const CartPage()),
               );
             },
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
         ],
       ),
 
       body: ListView(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12.w),
         children: [
-          // 🔹 هنا تم استبدال TextField بالكارد الجميل الخاص بالموقع
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            margin: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            margin: EdgeInsets.symmetric(vertical: 10.h),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
@@ -98,24 +109,24 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     const Icon(Icons.location_on, color: Colors.blue),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Send To",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                         ),
-                        SizedBox(height: 2),
+                        SizedBox(height: 2.h),
                         Text(
                           "Brisbane, Queensland",
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ],
@@ -126,95 +137,57 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 8),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 18.w, vertical: 8.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Change",
-                    style: TextStyle(color: Colors.white, fontSize: 13),
+                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
                   ),
                 ),
               ],
             ),
           ),
-
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "50% Off Today\nLimited-time picks\njust for you",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
-                        child: const Text(
-                          "Shop Now",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Image.asset('assets/man.png', height: 80),
-              ],
-            ),
+          SizedBox(height: 16.h),
+          Padding(
+            padding: EdgeInsets.all(8.w),
+            child: Image.asset('assets/images/img.png'),
           ),
-          const SizedBox(height: 20),
-          const Text(
-            "Popular Brand",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          SizedBox(height: 20.h),
+          Text(
+            "Popular Brands",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           SizedBox(
-            height: 100,
-            child: ListView(
+            height: 50.h,
+            child: ListView.builder(
+              itemCount: images.length,
               scrollDirection: Axis.horizontal,
-              children: [
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/05/Zara-logo.png"),
-                brandLogo("https://upload.wikimedia.org/wikipedia/en/3/31/Lacoste_logo.svg"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/02/Ralph-Lauren-Logo.png"),
-                brandLogo("https://upload.wikimedia.org/wikipedia/commons/4/44/Levi%27s_logo.svg"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/05/Nike-Logo.png"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/03/Adidas-Logo.png"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/05/HM-logo.png"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/05/Gucci-Logo.png"),
-                brandLogo("https://1000logos.net/wp-content/uploads/2017/03/Puma-logo.png"),
-              ],
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6.w),
+                  child: Image.asset(images[index]),
+                );
+              },
             ),
           ),
-
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20.h),
+          Text(
             "Flash Sale",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.75,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount:
+              MediaQuery.of(context).size.width > 600 ? 4 : 2,
+              childAspectRatio: 0.7,
             ),
             itemCount: products.length,
             itemBuilder: (context, index) {
@@ -226,44 +199,36 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Widget brandLogo(String url) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: CircleAvatar(
-        backgroundImage: NetworkImage(url),
-        radius: 30,
-      ),
-    );
-  }
-
-  Widget productItem(BuildContext context, product, cartProvider) {
+  Widget productItem(BuildContext context, product, CartProvider cartProvider) {
     return Card(
       elevation: 3,
-      margin: const EdgeInsets.all(8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: EdgeInsets.all(8.w),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Center(
-                child: Image.network(product.image,
-                    height: 100, fit: BoxFit.contain),
+                child: Image.network(
+                  product.image,
+                  height: 100.h,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6.h),
             Text(
               product.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
             ),
             Text("\$${product.price.toStringAsFixed(2)}",
-                style: const TextStyle(color: Colors.red)),
-            Text("⭐ ${product.rating}"),
-            const SizedBox(height: 5),
+                style: TextStyle(color: Colors.red, fontSize: 13.sp)),
+            Text("⭐ ${product.rating}", style: TextStyle(fontSize: 12.sp)),
+            SizedBox(height: 5.h),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -272,6 +237,7 @@ class _HomePageState extends State<HomePage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${product.title} added to cart!'),
+                      backgroundColor: Colors.green,
                       duration: const Duration(seconds: 1),
                     ),
                   );
@@ -279,9 +245,13 @@ class _HomePageState extends State<HomePage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
                 ),
-                child: const Text("Add to Cart"),
+                child: Text(
+                  "Add to Cart",
+                  style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                ),
               ),
             ),
           ],

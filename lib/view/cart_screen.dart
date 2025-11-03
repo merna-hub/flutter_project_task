@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../Controller/cart_controller.dart';
 
@@ -21,9 +22,9 @@ class CartPage extends StatelessWidget {
         title: const Text("Cart", style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: const [
+        actions: [
           Icon(Icons.favorite_border, color: Colors.black),
-          SizedBox(width: 10),
+          SizedBox(width: 10.w),
         ],
       ),
 
@@ -57,19 +58,19 @@ class CartPage extends StatelessWidget {
             ),
 
             const Divider(thickness: 1.2),
-            const SizedBox(height: 10),
+             SizedBox(height: 10.h),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text("Shipping Information",
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16)),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             infoRow("Total items", "${cartItems.length}"),
             infoRow("Shipping fee", "\$5.00"),
             infoRow("Taxes", "\$2.00"),
             const Divider(thickness: 1.2),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,8 +112,8 @@ class CartPage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.network(img, width: 70, height: 70, fit: BoxFit.cover),
-          const SizedBox(width: 15),
+          Image.network(img, width: 70.w, height: 70.h, fit: BoxFit.cover),
+           SizedBox(width: 15.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +121,7 @@ class CartPage extends StatelessWidget {
                 Text(name,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 16)),
-                const SizedBox(height: 4),
+                 SizedBox(height: 4.h),
                 Text(price),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_task/view/cart_screen.dart';
 import 'package:flutter_project_task/view/home_screen.dart';
 class ButtomNavigationBar extends StatefulWidget {
   const ButtomNavigationBar({super.key});
@@ -20,7 +19,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
     HomePage(),
     Center(child: Text('Search Page')),
     Center(child: Text('Wishlist Page')),
-    CartPage(),
+    // CartPage(),
     Center(child: Text('Profile Page')),
   ];
   @override
@@ -38,8 +37,8 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
                 icon: Icon(Icons.search), label: "Search"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.favorite), label: "Wishlist"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart), label: "Cart"),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.card_travel), label: "Cart"),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ],),
     );

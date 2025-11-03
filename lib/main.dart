@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_project_task/utels/navigation_buttom.dart';
 import 'Controller/product_controller.dart';
 import 'Controller/cart_controller.dart';
@@ -16,12 +17,20 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProductController()),
-        ChangeNotifierProvider(create: (context) => CartProvider()), // ✅ added
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const ButtomNavigationBar(),
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: const ButtomNavigationBar(),
+          );
+        },
       ),
     );
   }
 }
+
