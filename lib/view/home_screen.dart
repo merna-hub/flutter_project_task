@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -114,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Send To",
+                          "send_to".tr(),
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12.sp,
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 2.h),
                         Text(
-                          "Brisbane, Queensland",
+                          "brisbane,Queensland".tr(),
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   child: Text(
-                    "Change",
+                    "change".tr(),
                     style: TextStyle(color: Colors.white, fontSize: 13.sp),
                   ),
                 ),
@@ -158,7 +159,7 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 20.h),
           Text(
-            "Popular Brands",
+            "popular_Brands".tr(),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
           ),
           SizedBox(height: 20.h),
@@ -177,7 +178,7 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 20.h),
           Text(
-            "Flash Sale",
+          "flash_sale".tr(),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
           ),
           SizedBox(height: 10.h),
@@ -236,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                   cartProvider.addToCart(product);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${product.title} added to cart!'),
+                      content: Text('added_to_cart!'.tr()),
                       backgroundColor: Colors.green,
                       duration: const Duration(seconds: 1),
                     ),
@@ -249,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 child: Text(
-                  "Add to Cart",
+                  "add_to_cart".tr(),
                   style: TextStyle(color: Colors.white, fontSize: 13.sp),
                 ),
               ),

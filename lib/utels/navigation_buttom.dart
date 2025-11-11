@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_task/view/home_screen.dart';
+
+import '../view/profile_page.dart';
 class ButtomNavigationBar extends StatefulWidget {
   const ButtomNavigationBar({super.key});
 
@@ -20,7 +22,7 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
     Center(child: Text('Search Page')),
     Center(child: Text('Wishlist Page')),
     // CartPage(),
-    Center(child: Text('Profile Page')),
+    ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {

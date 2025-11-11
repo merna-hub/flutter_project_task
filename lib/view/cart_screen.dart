@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class CartPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: const Text("Cart", style: TextStyle(color: Colors.black)),
+        title:  Text("cart".tr(), style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [
@@ -30,9 +31,9 @@ class CartPage extends StatelessWidget {
 
 
       body: cartItems.isEmpty
-          ? const Center(
+          ?  Center(
         child: Text(
-          "Your cart is empty 🛒",
+          "your_cart_is_empty 🛒".tr(),
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
       )
@@ -59,16 +60,16 @@ class CartPage extends StatelessWidget {
 
             const Divider(thickness: 1.2),
              SizedBox(height: 10.h),
-            const Align(
+             Align(
               alignment: Alignment.centerLeft,
-              child: Text("Shipping Information",
+              child: Text("shipping_information".tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16)),
             ),
             SizedBox(height: 10.h),
-            infoRow("Total items", "${cartItems.length}"),
-            infoRow("Shipping fee", "\$5.00"),
-            infoRow("Taxes", "\$2.00"),
+            infoRow("total_items".tr(), "${cartItems.length}"),
+            infoRow("shipping_fee".tr(), "\$5.00"),
+            infoRow("taxes".tr(), "\$2.00"),
             const Divider(thickness: 1.2),
             SizedBox(height: 20.h),
 
@@ -76,7 +77,7 @@ class CartPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}",
+                  "total: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}".tr(),
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -90,7 +91,7 @@ class CartPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Checkout",
+                  child: Text("checkout".tr(),
                       style: TextStyle(color: Colors.white)),
                 ),
               ],
