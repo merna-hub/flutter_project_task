@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../themes/app_colors.dart';
+import '../themes/theme_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,127 +13,150 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String selectedLang = 'en';
+  late String selectedLang;
 
   @override
   Widget build(BuildContext context) {
+    selectedLang = context.locale.languageCode;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF0E8FF),
-      body: Column(
-        children: [
-          Container(
-            height: 150.h,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Color(0xFF9C6ADE),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
+      backgroundColor: AppColors.background(themeProvider.isDark),
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
+            child: Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: AppColors.card(themeProvider.isDark),
+                borderRadius: BorderRadius.circular(30.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 10.r,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ),
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Text(
-              'your_profile'.tr(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                transform: Matrix4.translationValues(0, -60, 0),
-                margin: const EdgeInsets.symmetric(horizontal: 25),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Profile Photo
+                  CircleAvatar(
+                    radius: 55.r,
+                    backgroundColor: AppColors.cardAlt(themeProvider.isDark),
+                    child: Icon(
+                      Icons.person,
+                      size: 70.r,
+                      color: Colors.grey[700],
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 55,
-                      backgroundColor: const Color(0xFFF0E8FF),
-                      child: Icon(Icons.person, size: 70, color: Colors.grey[700]),
+                  ),
+                  SizedBox(height: 15.h),
+
+                  // Name
+                  Text(
+                    'Merna Eid',
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary(themeProvider.isDark),
                     ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      'Merna Eid',
+                  ),
+
+                  // Subtitle
+                  Text(
+                    'Flutter dev.',
+                    style: TextStyle(
+                      color: AppColors.textSecondary(themeProvider.isDark),
+                      fontSize: 15.sp,
+                    ),
+                  ),
+
+                  SizedBox(height: 30.h),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "select_language".tr(),
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary(themeProvider.isDark),
                       ),
                     ),
-                    const Text(
-                      'Flutter dev.',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
-                    ),
-                    const SizedBox(height: 30),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "select_language".tr(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                  ),
+
+                  SizedBox(height: 10.h),
+
+                  // English
+                  RadioListTile<String>(
+                    value: 'en',
+                    groupValue: selectedLang,
+                    title: Row(
+                      children: [
+                        Image.asset('assets/images/Flag_of_the_United_States.svg.png', width: 35.w),
+                        SizedBox(width: 10.w),
+                        Text(
+                          'English',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: AppColors.textPrimary(themeProvider.isDark),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    RadioListTile<String>(
-                      value: 'en',
-                      groupValue: selectedLang,
-                      activeColor: const Color(0xFF9C6ADE),
-                      title: Row(
-                        children: [
-                          Image.asset('assets/images/Flag_of_the_United_States.svg.png', width: 35),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'English',
-                            style: TextStyle(fontSize: 16),
+                    onChanged: (value) {
+                      setState(() => selectedLang = value!);
+                      context.setLocale(const Locale('en'));
+                    },
+                  ),
+
+                  // Arabic
+                  RadioListTile<String>(
+                    value: 'ar',
+                    groupValue: selectedLang,
+                    title: Row(
+                      children: [
+                        Image.asset('assets/images/egypt.jpg', width: 35.w),
+                        SizedBox(width: 10.w),
+                        Text(
+                          'العربية',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: AppColors.textPrimary(themeProvider.isDark),
                           ),
-                        ],
-                      ),
-                      onChanged: (value) {
-                        setState(() => selectedLang = value!);
-                        context.setLocale(const Locale('en'));
-                      },
+                        ),
+                      ],
                     ),
-                    RadioListTile<String>(
-                      value: 'ar',
-                      groupValue: selectedLang,
-                      activeColor: const Color(0xFF9C6ADE),
-                      title: Row(
-                        children: [
-                          Image.asset('assets/images/egypt.jpg', width: 35),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'العربية',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
+                    onChanged: (value) {
+                      setState(() => selectedLang = value!);
+                      context.setLocale(const Locale('ar'));
+                    },
+                  ),
+
+                  SizedBox(height: 20.h),
+
+                  // Dark Mode
+                  SwitchListTile(
+                    title: Text(
+                      'dark_mode'.tr(),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textPrimary(themeProvider.isDark),
                       ),
-                      onChanged: (value) {
-                        setState(() => selectedLang = value!);
-                        context.setLocale(const Locale('ar'));
-                      },
                     ),
-                  ],
-                ),
+                    value: themeProvider.isDark,
+                    onChanged: (value) => themeProvider.toggleTheme(value),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_project_task/utels/navigation_buttom.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'Controller/product_controller.dart';
 import 'Controller/cart_controller.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'Controller/favorite_controller.dart';
+import 'utels/navigation_buttom.dart';
+import 'themes/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized(); // Initialize EasyLocalization
+  await EasyLocalization.ensureInitialized();
 
   runApp(
     EasyLocalization(
@@ -27,20 +30,32 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ProductController()),
-        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => ProductController()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()), // ThemeProvider
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter App',
-            locale: context.locale, // <-- set current locale
+
+            // Localization
+            locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
+
+            // Dark/Light Theme
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: themeProvider.themeMode,
+
             home: const ButtomNavigationBar(),
           );
         },
@@ -48,7 +63,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-/// in the button to switch the lang //////
-// context.setLocale(Locale('ar')); // switch to Arabic
-// context.setLocale(Locale('en')); // switch to English

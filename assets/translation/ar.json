@@ -3,7 +3,7 @@
   "brisbane,Queensland": "بريسبان، كوينزلاند",
   "change": "تغيير",
   "popular_Brands": "العلامات التجارية الشهيرة",
-  "flash_sale": "تخفيضات سريعة",
+  "flash_sale": "تخفيضات فلاش",
   "added_to_cart!": "تمت الإضافة إلى السلة!",
   "add_to_cart": "أضف إلى السلة",
   "cart": "السلة",
@@ -14,5 +14,12 @@
   "taxes": "الضرائب",
   "total:": "الإجمالي:",
   "checkout": "إتمام الشراء",
-  "select_language":"اختر اللغه"
+  "select_language": "اختر اللغة",
+  "favorite": "المفضلة",
+  "no_favorite_items": "لا توجد عناصر مفضلة بعد",
+  "Home": "الرئيسية",
+  "Search Page": "صفحة البحث",
+  "search": "بحث",
+  "Wishlist": "المفضلة",
+  "Profile": "الملف الشخصي"
 }

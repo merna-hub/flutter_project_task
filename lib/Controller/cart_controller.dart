@@ -1,31 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_task/data/model/product_model.dart';
+import '../data/model/product_model.dart';
 
-class CartProvider with ChangeNotifier {
-  final List<Product> _cartItems = [];
+class CartItem {
+  final Product product;
+  int quantity;
 
-  List<Product> get cartItems => _cartItems;
+  CartItem({required this.product, this.quantity = 1});
+}
+
+class CartProvider extends ChangeNotifier {
+  Map<int, CartItem> _items = {}; // key: product.id
+
+  Map<int, CartItem> get items => _items;
+
+  List<CartItem> get cartItems => _items.values.toList();
+
+  double get totalPrice {
+    double total = 0;
+    _items.forEach((key, item) {
+      total += item.product.price * item.quantity;
+    });
+    return total;
+  }
 
   void addToCart(Product product) {
-    _cartItems.add(product);
+    if (_items.containsKey(product.id)) {
+      _items[product.id]!.quantity += 1;
+    } else {
+      _items[product.id] = CartItem(product: product, quantity: 1);
+    }
     notifyListeners();
   }
 
   void removeFromCart(Product product) {
-    _cartItems.remove(product);
-    notifyListeners();
+    if (_items.containsKey(product.id)) {
+      _items.remove(product.id);
+      notifyListeners();
+    }
   }
 
   void clearCart() {
-    _cartItems.clear();
+    _items = {};
     notifyListeners();
   }
-  double get totalPrice {
-    double total = 0.0;
-    for (var item in _cartItems) {
-      total += item.price;
-    }
-    return total;
-  }
 
+  void decreaseQuantity(Product product) {
+    if (_items.containsKey(product.id)) {
+      if (_items[product.id]!.quantity > 1) {
+        _items[product.id]!.quantity -= 1;
+      } else {
+        _items.remove(product.id);
+      }
+      notifyListeners();
+    }
+  }
 }
