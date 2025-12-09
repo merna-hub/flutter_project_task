@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Dark Mode
                   SwitchListTile(
                     title: Text(
-                      'dark_mode'.tr(),
+                      "dark mode".tr(),
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,

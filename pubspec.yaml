@@ -43,7 +43,7 @@ dependencies:
   easy_localization: ^3.0.8
 
 dev_dependencies:
-flutter_test:
+ flutter_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the

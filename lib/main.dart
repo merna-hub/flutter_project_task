@@ -6,8 +6,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'Controller/product_controller.dart';
 import 'Controller/cart_controller.dart';
 import 'Controller/favorite_controller.dart';
+import 'Controller/search_controller.dart';   // ⭐ مهم جداً
 import 'utels/navigation_buttom.dart';
 import 'themes/theme_provider.dart';
+
+// صفحة تفاصيل المنتج
+import 'view/item_details_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +37,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductController()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()), // ThemeProvider
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => SearchControllerProvider()), // ⭐ تمت الإضافة هنا
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -56,6 +61,7 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData.dark(),
             themeMode: themeProvider.themeMode,
 
+            // الصفحة الرئيسية
             home: const ButtomNavigationBar(),
           );
         },
@@ -63,3 +69,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

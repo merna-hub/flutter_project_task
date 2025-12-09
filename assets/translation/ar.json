@@ -2,7 +2,6 @@
   "send_to": "أرسل إلى",
   "brisbane,Queensland": "بريسبان، كوينزلاند",
   "change": "تغيير",
-  "popular_Brands": "العلامات التجارية الشهيرة",
   "flash_sale": "تخفيضات فلاش",
   "added_to_cart!": "تمت الإضافة إلى السلة!",
   "add_to_cart": "أضف إلى السلة",
@@ -20,6 +19,8 @@
   "Home": "الرئيسية",
   "Search Page": "صفحة البحث",
   "search": "بحث",
-  "Wishlist": "المفضلة",
-  "Profile": "الملف الشخصي"
+  "Profile": "الملف الشخصي",
+  "popular_brands": "الماركات الشهيرة",
+  "dark_mode":"تغيير لون الواجهه",
+  "favoirte": "المفضلة"
 }

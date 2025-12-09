@@ -2,7 +2,7 @@
   "send_to": "Send To",
   "brisbane,Queensland": "Brisbane,Queensland",
   "change": "Change",
-  "popular_Brands": "popular_Brands",
+  "popular_brands": "Popular Brands",
   "flash_sale": "flash Sale",
   "added_to_cart!": "added to cart!",
   "add_to_cart": "Add to Cart",
@@ -20,7 +20,9 @@
   "Home": "Home",
   "Search Page": "Search Page",
   "search": "Search",
-  "favoirte": "Favoirte",
   "Profile": "Profile",
-  "arabic": "Arabic"
+  "arabic": "Arabic",
+  "Dark_mode": "dark mode",
+  "favoirte": "Favoirte",
+  "Profile": "Profile"
 }

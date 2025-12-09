@@ -15,6 +15,7 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get cartItems => _items.values.toList();
 
+
   double get totalPrice {
     double total = 0;
     _items.forEach((key, item) {
@@ -22,6 +23,16 @@ class CartProvider extends ChangeNotifier {
     });
     return total;
   }
+
+
+  int get totalQuantity {
+    int total = 0;
+    _items.forEach((key, item) {
+      total += item.quantity;
+    });
+    return total;
+  }
+
 
   void addToCart(Product product) {
     if (_items.containsKey(product.id)) {
@@ -32,6 +43,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void removeFromCart(Product product) {
     if (_items.containsKey(product.id)) {
       _items.remove(product.id);
@@ -39,10 +51,12 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
+
   void clearCart() {
     _items = {};
     notifyListeners();
   }
+
 
   void decreaseQuantity(Product product) {
     if (_items.containsKey(product.id)) {
@@ -55,3 +69,4 @@ class CartProvider extends ChangeNotifier {
     }
   }
 }
+

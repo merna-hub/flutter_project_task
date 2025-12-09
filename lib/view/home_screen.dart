@@ -89,13 +89,16 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.search, color: isDark ? Colors.white : Colors.black),
             onPressed: () {},
           ),
+
           Consumer<CartProvider>(
             builder: (context, cartProvider, _) {
               return Stack(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.card_travel,
-                        color: isDark ? Colors.white : Colors.black),
+                    icon: Icon(
+                      Icons.card_travel,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -103,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-                  if (cartProvider.cartItems.isNotEmpty)
+                  if (cartProvider.totalQuantity > 0)
                     Positioned(
                       right: 6,
                       top: 6,
@@ -113,9 +116,10 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                        constraints:
+                        const BoxConstraints(minWidth: 16, minHeight: 16),
                         child: Text(
-                          cartProvider.cartItems.length.toString(),
+                          cartProvider.totalQuantity.toString(), // ← هنا التعديل
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -129,9 +133,11 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+
           SizedBox(width: 10.w),
         ],
       ),
+
       body: ListView(
         padding: EdgeInsets.all(12.w),
         children: [
@@ -218,9 +224,8 @@ class _HomePageState extends State<HomePage> {
 
           // POPULAR BRANDS
           SizedBox(height: 20.h),
-          Text(
-            "popular Brands".tr(),
-            style: TextStyle(
+    Text("popular_brands".tr(),
+    style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18.sp,
               color: AppColors.textPrimary(isDark),
