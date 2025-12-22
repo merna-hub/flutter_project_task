@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_project_task/view/search_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_project_task/view/cart_screen.dart';
-
 import '../Controller/product_controller.dart';
 import '../Controller/cart_controller.dart';
 import '../Controller/favorite_controller.dart';
@@ -87,7 +87,14 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: isDark ? Colors.white : Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ProductSearchScreen(),
+                ),
+              );
+            },
           ),
 
           Consumer<CartProvider>(
@@ -184,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        "Egypt, Queensland",
+                        "Egypt, Queensland".tr(),
                         style: TextStyle(
                           color: AppColors.textPrimary(isDark),
                           fontSize: 14.sp,

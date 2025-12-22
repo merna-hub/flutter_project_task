@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Image.asset('assets/images/Flag_of_the_United_States.svg.png', width: 35.w),
                         SizedBox(width: 10.w),
                         Text(
-                          'English',
+                          'English'.tr(),
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: AppColors.textPrimary(themeProvider.isDark),
@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Image.asset('assets/images/egypt.jpg', width: 35.w),
                         SizedBox(width: 10.w),
                         Text(
-                          'العربية',
+                          'Arabic'.tr(),
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: AppColors.textPrimary(themeProvider.isDark),
@@ -138,8 +138,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
 
                   SizedBox(height: 20.h),
-
-                  // Dark Mode
                   SwitchListTile(
                     title: Text(
                       "dark mode".tr(),

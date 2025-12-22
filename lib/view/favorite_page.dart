@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Controller/favorite_controller.dart';
@@ -12,10 +13,10 @@ class FavoritesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Favorites"),
-      ),
+        title: Text("Favorites".tr())
+    ),
       body: favorites.isEmpty
-          ? const Center(child: Text("No favorites yet"))
+          ? Center(child: Text("No favorites yet".tr()))
           : ListView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: favorites.length,

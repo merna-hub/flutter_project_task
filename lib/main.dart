@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_project_task/themes/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'Controller/product_controller.dart';
 import 'Controller/cart_controller.dart';
 import 'Controller/favorite_controller.dart';
-import 'Controller/search_controller.dart';   // ⭐ مهم جداً
 import 'utels/navigation_buttom.dart';
-import 'themes/theme_provider.dart';
-
-// صفحة تفاصيل المنتج
-import 'view/item_details_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => SearchControllerProvider()), // ⭐ تمت الإضافة هنا
+        ChangeNotifierProvider(create: (_) => SearchController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -60,8 +55,6 @@ class MyApp extends StatelessWidget {
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
             themeMode: themeProvider.themeMode,
-
-            // الصفحة الرئيسية
             home: const ButtomNavigationBar(),
           );
         },

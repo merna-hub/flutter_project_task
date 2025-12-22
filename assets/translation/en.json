@@ -18,11 +18,19 @@
   "favorite": "Favorite",
   "no_favorite_items": "No favorite items yet",
   "Home": "Home",
-  "Search Page": "Search Page",
-  "search": "Search",
   "Profile": "Profile",
+  "Search Page": "Search Page",
   "arabic": "Arabic",
   "Dark_mode": "dark mode",
   "favoirte": "Favoirte",
-  "Profile": "Profile"
+  "Favorites": "Favorites",
+  "No favorites yet": "No favorites yet",
+  "English":"English",
+  "Arabic": "Arabic",
+  "dark mode": "dark mode",
+  "Egypt, Queensland": "Egypt, Queensland",
+  "search": "search",
+  "No products found": "No products found",
+  "Search Products": "Search Products",
+  "Search Products": "Search Products"
 }

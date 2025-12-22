@@ -4,6 +4,7 @@ import 'package:flutter_project_task/view/home_screen.dart';
 
 import '../view/favorite_page.dart';
 import '../view/profile_page.dart';
+import '../view/search_screen.dart';
 
 class ButtomNavigationBar extends StatefulWidget {
   const ButtomNavigationBar({super.key});
@@ -21,17 +22,17 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
     });
   }
 
-  final List<Widget> _pages = [
-    HomePage(),
-    Center(child: Text('Search Page'.tr())),
-    FavoritesScreen(),
-    ProfilePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      HomePage(),
+      ProductSearchScreen(),
+      FavoritesScreen(),
+      ProfilePage(),
+    ];
+
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         selectedItemColor: Colors.red,
@@ -39,19 +40,19 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
         onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
             label: "Home".tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             label: "search".tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "favoirte".tr(),
+            icon: const Icon(Icons.favorite),
+            label: "favorite".tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             label: "Profile".tr(),
           ),
         ],
@@ -59,3 +60,4 @@ class _ButtomNavigationBarState extends State<ButtomNavigationBar> {
     );
   }
 }
+

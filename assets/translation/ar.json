@@ -17,10 +17,19 @@
   "favorite": "المفضلة",
   "no_favorite_items": "لا توجد عناصر مفضلة بعد",
   "Home": "الرئيسية",
-  "Search Page": "صفحة البحث",
   "search": "بحث",
+  "Search Page": "صفحة البحث",
   "Profile": "الملف الشخصي",
   "popular_brands": "الماركات الشهيرة",
   "dark_mode":"تغيير لون الواجهه",
-  "favoirte": "المفضلة"
+  "favoirte": "المفضلة",
+  "Favorites": "المفضلة",
+  "No favorites yet": "لا يوجد مفضلة بعد",
+  "English": " اللغه الانحليزية ",
+  "Arabic": " اللغه العربية",
+  "dark mode": "الوضع المظلم",
+  "Egypt, Queensland": "مصر، كوينزلاند",
+  "No products found": "لم يتم العثور على منتجات",
+    "Search Products": "ابحث عن المنتجات",
+  "Search Products": "ابحث عن المنتجات"
 }
