@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_project_task/view/welcome_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../AuthProvider/authProvider.dart';
 import '../themes/app_colors.dart';
 import '../themes/theme_provider.dart';
+import '../utels/navigation_buttom.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,10 +16,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   late String selectedLang;
+
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     selectedLang = context.locale.languageCode;
     final themeProvider = Provider.of<ThemeProvider>(context);
 
@@ -150,6 +157,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     value: themeProvider.isDark,
                     onChanged: (value) => themeProvider.toggleTheme(value),
                   ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        await authProvider.signOut();
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Logged out successfully")),
+                        );
+
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => WelcomeScreen()),
+                              (route) => false,
+                        );
+                      },
+
+                      child: Text("Logout"))
                 ],
               ),
             ),
