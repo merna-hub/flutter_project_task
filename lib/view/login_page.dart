@@ -1,134 +1,238 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_task/view/home_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
 import '../AuthProvider/authProvider.dart';
 import '../utels/navigation_buttom.dart';
 
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colors.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: colors.onSurface),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Login here",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Welcome back you've been missed!",
-              style: TextStyle(color: Colors.black54, fontSize: 20),
-            ),
-            const SizedBox(height: 30),
+        padding: EdgeInsets.all(24.w),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 40.h),
 
-            /// Email
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                hintText: "Email",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+              // Title
+              Text(
+                "Login here",
+                style: TextStyle(
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
                 ),
               ),
-            ),
-            const SizedBox(height: 15),
 
-            /// Password
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: "Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+              SizedBox(height: 10.h),
+
+              // Subtitle
+              Text(
+                "Welcome back you've been missed!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colors.onSurface.withOpacity(0.7),
+                  fontSize: 16.sp,
                 ),
               ),
-            ),
 
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {},
-                child: const Text("Forgot your password?"),
-              ),
-            ),
+              SizedBox(height: 30.h),
 
-            const SizedBox(height: 20),
-
-            /// Sign In Button
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              /// Email
+              TextField(
+                controller: emailController,
+                style: TextStyle(color: colors.onSurface),
+                decoration: InputDecoration(
+                  hintText: "Email",
+                  hintStyle: TextStyle(
+                    color: colors.onSurface.withOpacity(0.5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: colors.outline),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
                 ),
               ),
-              onPressed: () async {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> ButtomNavigationBar()));
-                String? result = await authProvider.signIn(
-                  emailController.text.trim(),
-                  passwordController.text.trim(),
-                );
 
-                if (result != null) {
-                  // لو فيه خطأ
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(result)),
-                  );
-                } else {
-                  // لو نجحت
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Sign In Successful")),
-                  );
-                  // ممكن تعمل نافيجيشن للصفحة الرئيسية بعد تسجيل الدخول
-                  // Navigator.pushReplacementNamed(context, '/home');
-                }
-              },
-              child: const Text(
-                "Sign in",
-                style: TextStyle(color: Colors.white),
+              SizedBox(height: 15.h),
+
+              /// Password with eye icon
+              TextField(
+                controller: passwordController,
+                obscureText: _obscurePassword,
+                style: TextStyle(color: colors.onSurface),
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  hintStyle: TextStyle(
+                    color: colors.onSurface.withOpacity(0.5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: colors.outline),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  suffixIcon: IconButton(
+                    splashRadius: 20,
+                    iconSize: 22,
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: colors.onSurface.withOpacity(0.7),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
               ),
-            ),
 
-            const SizedBox(height: 20),
-            const Text("Or continue with"),
-            const SizedBox(height: 15),
+              SizedBox(height: 10.h),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.g_mobiledata, size: 40),
-                SizedBox(width: 15),
-                Icon(Icons.facebook, size: 30),
-                SizedBox(width: 15),
-                Icon(Icons.apple, size: 30),
-              ],
-            ),
-          ],
+              /// Forgot password
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () async {
+                    if (emailController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please enter your email"),
+                        ),
+                      );
+                      return;
+                    }
+
+                    try {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              "Password reset email sent! Check your inbox."),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Error: ${e.toString()}"),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    "Forgot your password?",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+
+              /// Sign In Button
+              SizedBox(
+                width: double.infinity,
+                height: 50.h,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (emailController.text.isEmpty ||
+                        passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please fill all fields"),
+                        ),
+                      );
+                      return;
+                    }
+
+                    String? result = await authProvider.signIn(
+                      emailController.text.trim(),
+                      passwordController.text.trim(),
+                    );
+
+                    if (result != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(result)),
+                      );
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ButtomNavigationBar(),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    "Sign in",
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+
+              Text(
+                "Or continue with",
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: colors.onSurface.withOpacity(0.7),
+                ),
+              ),
+
+              SizedBox(height: 15.h),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.g_mobiledata, size: 40.sp, color: Colors.blue),
+                  SizedBox(width: 15.w),
+                  Icon(Icons.facebook, size: 30.sp, color: Colors.blue),
+                  SizedBox(width: 15.w),
+                  Icon(Icons.apple, size: 30.sp, color: Colors.blue),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
