@@ -24,7 +24,7 @@ class ProductController with ChangeNotifier {
     notifyListeners();
     try {
       _products = await _apiService.fetchProducts();
-      _filteredProducts = _products; // Initialize filtered list
+      _filteredProducts = _products;
       _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();

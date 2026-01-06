@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_project_task/view/search_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_project_task/view/search_screen.dart';
 import 'package:flutter_project_task/view/cart_screen.dart';
 import '../Controller/product_controller.dart';
 import '../Controller/cart_controller.dart';
@@ -10,6 +10,7 @@ import '../Controller/favorite_controller.dart';
 import '../data/model/product_model.dart';
 import '../themes/theme_provider.dart';
 import '../themes/app_colors.dart';
+import 'PopularBrands_Page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,15 +20,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> images = [
-    'assets/images/zara.png',
-    'assets/images/hm.png',
-    'assets/images/lacoste.png',
-    'assets/images/pullbear.png',
-    'assets/images/ralph.png',
-    'assets/images/lacoste.png',
-    'assets/images/pullbear.png',
-    'assets/images/ralph.png',
+  List<Map<String, String>> brands = [
+    {
+      "image": "assets/images/zara.png",
+      "title": "ZARA".tr(),
+      "description": "Zara is a leading Spanish fashion brand, part of the Inditex group. Founded in 1974, it is known for its fast fashion, offering trendy and affordable clothing for men, women, and children. Zara quickly brings the latest styles to stores worldwide and focuses on modern, minimalist designs. Recently, it has also been working on sustainability, using eco-friendly materials and practices. Zara combines style, quality, and accessibility, making it popular globally.".tr()
+    },
+    {
+      "image": "assets/images/hm.png",
+      "title": "H&M ".tr(),
+      "description": "H&M (Hennes & Mauritz) is a Swedish global fashion brand founded in 1947. It offers affordable, trendy clothing for men, women, and children, along with accessories and home products. H&M is known for its fast fashion model, bringing new styles quickly to stores worldwide, and it is increasingly focusing on sustainability by using eco-friendly materials and promoting recycling programs".tr()
+    },
+    {
+      "image": "assets/images/lacoste.png",
+      "title": "Lacoste ".tr(),
+      "description": "Lacoste is a French clothing brand founded in 1933 by tennis player René Lacoste. It is famous for its polo shirts with the iconic crocodile logo and offers clothing, footwear, accessories, and fragrances for men, women, and children. Lacoste is known for its classic, sporty, and elegant style, combining comfort with luxury. The brand represents timeless fashion and quality worldwide.".tr()
+    },
+    {
+      "image": "assets/images/shein.png",
+      "title": "Shein".tr(),
+      "description": "Shein is a Chinese online fashion retailer founded in 2008, known for offering affordable, trendy clothing for women, men, and children worldwide. It specializes in fast fashion, quickly producing new styles that follow the latest trends. Shein is popular for its wide variety, low prices, and online convenience, though it has faced criticism regarding sustainability and labor practices.".tr()
+    },
+    {
+      "image": "assets/images/lc.png",
+      "title": "Lc waikiki".tr(),
+      "description": "LC Waikiki is a Turkish fashion brand founded in 1988, offering affordable and stylish clothing for men, women, and children. The brand is known for its casual and family-friendly fashion, combining comfort, quality, and trendy designs. With stores in many countries, LC Waikiki has become a popular global brand for everyday fashion..".tr()
+    },
   ];
 
   @override
@@ -70,6 +88,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.background(isDark),
       appBar: AppBar(
         backgroundColor: AppColors.primary(isDark),
+        automaticallyImplyLeading: false, // ده اللي شال السهم
         title: Row(
           children: [
             Image.asset('assets/images/logo.png', height: 30.h),
@@ -90,13 +109,10 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const ProductSearchScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const ProductSearchScreen()),
               );
             },
           ),
-
           Consumer<CartProvider>(
             builder: (context, cartProvider, _) {
               return Stack(
@@ -126,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                         constraints:
                         const BoxConstraints(minWidth: 16, minHeight: 16),
                         child: Text(
-                          cartProvider.totalQuantity.toString(), // ← هنا التعديل
+                          cartProvider.totalQuantity.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -140,11 +156,9 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-
           SizedBox(width: 10.w),
         ],
       ),
-
       body: ListView(
         padding: EdgeInsets.all(12.w),
         children: [
@@ -221,49 +235,63 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-
-          // Banner
           SizedBox(height: 16.h),
+
           Padding(
             padding: EdgeInsets.all(8.w),
             child: Image.asset('assets/images/img.png'),
           ),
-
-          // POPULAR BRANDS
           SizedBox(height: 20.h),
-    Text("popular_brands".tr(),
-    style: TextStyle(
+
+          Text(
+            "popular_brands".tr(),
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18.sp,
               color: AppColors.textPrimary(isDark),
             ),
           ),
-
           SizedBox(height: 20.h),
+
           SizedBox(
             height: 80.h,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: images.length,
+              itemCount: brands.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.w),
-                  child: Container(
-                    padding: EdgeInsets.all(5.w),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PopularBrandsPage(
+                            brandImage: brands[index]["image"]!,
+                            productName: brands[index]["title"]!,
+                            rating: 4.8,
+                            productDescription: brands[index]["description"]!,
+                          ),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(40),
+                    child: Container(
+                      padding: EdgeInsets.all(5.w),
+                      width: 80,
+                      height: 80,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(brands[index]["image"]!),
                     ),
-                    child: Image.asset(images[index]),
                   ),
                 );
               },
             ),
           ),
 
-          // FLASH SALE
           SizedBox(height: 25.h),
           Text(
             "flash_sale".tr(),
@@ -273,8 +301,8 @@ class _HomePageState extends State<HomePage> {
               color: isDark ? Colors.white : Colors.black,
             ),
           ),
-
           SizedBox(height: 10.h),
+
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -293,7 +321,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // PRODUCT ITEM
   Widget productItem(BuildContext context, Product product, CartProvider cartProvider,
       FavoriteProvider favoriteProvider, bool isDark) {
     return InkWell(
@@ -332,7 +359,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 12.h),
 
-                  // BUTTON INSIDE POPUP
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -371,8 +397,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-
-      // CARD STYLE
       child: Card(
         elevation: 3,
         margin: EdgeInsets.all(8.w),
@@ -422,9 +446,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               SizedBox(height: 6.h),
-
               Text(
                 product.title,
                 maxLines: 1,
@@ -435,12 +457,10 @@ class _HomePageState extends State<HomePage> {
                   color: isDark ? Colors.white : Colors.black,
                 ),
               ),
-
               Text(
                 "${product.price.toStringAsFixed(2)}",
                 style: TextStyle(color: Colors.red, fontSize: 13.sp),
               ),
-
               Text(
                 "⭐ ${product.rating}",
                 style: TextStyle(
@@ -480,7 +500,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
             ],
           ),
         ),

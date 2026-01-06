@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../AuthProvider/authProvider.dart';
 import '../utels/navigation_buttom.dart';
+import 'forget_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   bool _obscurePassword = true;
 
   @override
@@ -35,133 +36,67 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               SizedBox(height: 40.h),
-
-              // Title
-              Text(
-                "Login here",
-                style: TextStyle(
-                  fontSize: 26.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
-              ),
-
+              Text("Login here".tr(),
+                  style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold, color: Colors.blue)),
               SizedBox(height: 10.h),
-
-              // Subtitle
-              Text(
-                "Welcome back you've been missed!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: colors.onSurface.withOpacity(0.7),
-                  fontSize: 16.sp,
-                ),
-              ),
-
+              Text("Welcome back you".tr(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: colors.onSurface.withOpacity(0.7), fontSize: 16.sp)),
               SizedBox(height: 30.h),
-
-              /// Email
               TextField(
                 controller: emailController,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Email",
-                  hintStyle: TextStyle(
-                    color: colors.onSurface.withOpacity(0.5),
-                  ),
+                  hintText: "Email".tr(),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                 ),
               ),
-
               SizedBox(height: 15.h),
-
-              /// Password with eye icon
               TextField(
                 controller: passwordController,
                 obscureText: _obscurePassword,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Password",
-                  hintStyle: TextStyle(
-                    color: colors.onSurface.withOpacity(0.5),
-                  ),
+                  hintText: "Password".tr(),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                   suffixIcon: IconButton(
                     splashRadius: 20,
-                    iconSize: 22,
                     icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: colors.onSurface.withOpacity(0.7),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
+                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        color: colors.onSurface.withOpacity(0.7)),
+                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                   ),
                 ),
               ),
-
               SizedBox(height: 10.h),
-
-              /// Forgot password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () async {
-                    if (emailController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter your email"),
-                        ),
-                      );
-                      return;
-                    }
-
-                    try {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              "Password reset email sent! Check your inbox."),
-                        ),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Error: ${e.toString()}"),
-                        ),
-                      );
-                    }
-                  },
-                  child: Text(
-                    "Forgot your password?",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.blue,
-                    ),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()),
                   ),
+                  child:  Text("Forgot Password?".tr()),
                 ),
               ),
-
               SizedBox(height: 20.h),
 
-              /// Sign In Button
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
@@ -169,67 +104,59 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
                   ),
                   onPressed: () async {
-                    if (emailController.text.isEmpty ||
-                        passwordController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please fill all fields"),
-                        ),
+                    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  "Please fill all fields".tr()))
                       );
                       return;
                     }
-
                     String? result = await authProvider.signIn(
-                      emailController.text.trim(),
-                      passwordController.text.trim(),
-                    );
-
+                        emailController.text.trim(), passwordController.text.trim());
                     if (result != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(result)),
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
                     } else {
                       Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ButtomNavigationBar(),
-                        ),
-                      );
+                          context, MaterialPageRoute(builder: (context) => ButtomNavigationBar()));
                     }
                   },
-                  child: Text(
-                    "Sign in",
-                    style: TextStyle(fontSize: 16.sp),
-                  ),
+                  child: Text("Sign in".tr(), style: TextStyle(fontSize: 16.sp)),
                 ),
               ),
-
               SizedBox(height: 20.h),
-
-              Text(
-                "Or continue with",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: colors.onSurface.withOpacity(0.7),
-                ),
-              ),
-
+              Text("Or continue with".tr(),
+                  style: TextStyle(fontSize: 14.sp, color: colors.onSurface.withOpacity(0.7))),
               SizedBox(height: 15.h),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.g_mobiledata, size: 40.sp, color: Colors.blue),
-                  SizedBox(width: 15.w),
-                  Icon(Icons.facebook, size: 30.sp, color: Colors.blue),
-                  SizedBox(width: 15.w),
-                  Icon(Icons.apple, size: 30.sp, color: Colors.blue),
-                ],
+              GestureDetector(
+                onTap: () async {
+                  String? result = await authProvider.signInWithGoogle();
+                  if (result != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+                  } else {
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (context) => ButtomNavigationBar()));
+                  }
+                },
+                child: Container(
+                  width: 50.w,
+                  height: 50.h,
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.blue),
+                  ),
+                  child:Center(
+                      child: Icon(
+                        Icons.g_mobiledata,
+                        color: Colors.blue,
+                        size: 30.sp,
+                      )),
+                ),
               ),
             ],
           ),

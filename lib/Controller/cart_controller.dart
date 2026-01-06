@@ -9,7 +9,7 @@ class CartItem {
 }
 
 class CartProvider extends ChangeNotifier {
-  Map<int, CartItem> _items = {}; // key: product.id
+  Map<int, CartItem> _items = {};
 
   Map<int, CartItem> get items => _items;
 

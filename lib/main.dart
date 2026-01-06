@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SearchController()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()), // هنا ضفناه
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData.dark(),
             themeMode: themeProvider.themeMode,
 
-            // الصفحة الرئيسية: WelcomeScreen
             home: const WelcomeScreen(),
           );
         },

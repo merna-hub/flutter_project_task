@@ -47,7 +47,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -62,8 +61,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   SizedBox(height: 15.h),
-
-                  // Name
                   Text(
                     'Merna Eid',
                     style: TextStyle(
@@ -72,8 +69,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: AppColors.textPrimary(themeProvider.isDark),
                     ),
                   ),
-
-                  // Subtitle
                   Text(
                     'Flutter dev.',
                     style: TextStyle(
@@ -81,9 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontSize: 15.sp,
                     ),
                   ),
-
                   SizedBox(height: 30.h),
-
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -95,10 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 10.h),
-
-                  // English
                   RadioListTile<String>(
                     value: 'en',
                     groupValue: selectedLang,
@@ -120,8 +110,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       context.setLocale(const Locale('en'));
                     },
                   ),
-
-                  // Arabic
                   RadioListTile<String>(
                     value: 'ar',
                     groupValue: selectedLang,
@@ -143,7 +131,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       context.setLocale(const Locale('ar'));
                     },
                   ),
-
                   SizedBox(height: 20.h),
                   SwitchListTile(
                     title: Text(
@@ -160,18 +147,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ElevatedButton(
                       onPressed: () async {
                         await authProvider.signOut();
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Logged out successfully")),
                         );
-
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (_) => WelcomeScreen()),
                               (route) => false,
                         );
                       },
-
                       child: Text("Logout"))
                 ],
               ),

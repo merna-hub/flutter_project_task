@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../data/model/product_model.dart';
 
@@ -10,23 +11,26 @@ class ItemDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
+    Color textColor = isDark ? Colors.white : Colors.black;
+    Color bgColor = isDark ? Colors.black : Colors.white;
+
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         title: Text(
-          "Item Details",
-          style: TextStyle(color: isDark ? Colors.white : Colors.black),
+          "item_details".tr(),
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: isDark ? Colors.black : Colors.white,
-        iconTheme: IconThemeData(
-            color: isDark ? Colors.white : Colors.black), // لون أيقونات العودة
+        backgroundColor: bgColor,
+        iconTheme: IconThemeData(color: textColor),
         centerTitle: true,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // صورة المنتج
             Center(
               child: Image.network(
                 product.image,
@@ -34,72 +38,71 @@ class ItemDetailsPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+
             const SizedBox(height: 20),
-            // العنوان
+
+            /// Title
             Text(
               product.title,
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.black),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
             ),
+
             const SizedBox(height: 10),
-            // السعر
             Text(
-              "\$${product.price.toStringAsFixed(2)}",
+              "${"price".tr()}: \$${product.price.toStringAsFixed(2)}",
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: isDark ? Colors.white : Colors.black),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
             ),
+
             const SizedBox(height: 10),
-            // التصنيف
             Text(
-              "Category: ${product.category}",
+              "${"category".tr()}: ${product.category}",
               style: TextStyle(
-                  fontSize: 16, color: isDark ? Colors.white : Colors.black),
+                fontSize: 16,
+                color: textColor,
+              ),
             ),
+
             const SizedBox(height: 10),
-            // الوصف
+            Text(
+              "description".tr(),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+
+            const SizedBox(height: 5),
             Text(
               product.description,
               style: TextStyle(
-                  fontSize: 16, color: isDark ? Colors.white : Colors.black),
+                fontSize: 16,
+                color: textColor,
+              ),
             ),
-            const SizedBox(height: 10),
-            // التقييم
+
+            const SizedBox(height: 15),
             Row(
               children: [
                 const Icon(Icons.star, color: Colors.amber),
                 const SizedBox(width: 5),
                 Text(
-                  product.rating.toString(),
+                  "${"rating".tr()}: ${product.rating}",
                   style: TextStyle(
-                      fontSize: 16,
-                      color: isDark ? Colors.white : Colors.black),
+                    fontSize: 16,
+                    color: textColor,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            // زر لإضافة للـ Cart (اختياري)
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // هنا ممكن تضيفي action لإضافة المنتج للكارت
-                },
-                style: ElevatedButton.styleFrom(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: isDark ? Colors.blueGrey : Colors.blue[800],
-                ),
-                child: const Text(
-                  "Add to Cart",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
           ],
         ),
       ),

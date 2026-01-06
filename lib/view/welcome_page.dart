@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'login_page.dart';
@@ -17,7 +18,6 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // صورة
             SizedBox(
               height: 220.h,
               child: Image.asset(
@@ -27,8 +27,6 @@ class WelcomeScreen extends StatelessWidget {
             ),
 
             SizedBox(height: 30.h),
-
-            // العنوان
             Text(
               "Modeee",
               textAlign: TextAlign.center,
@@ -40,26 +38,22 @@ class WelcomeScreen extends StatelessWidget {
             ),
 
             SizedBox(height: 15.h),
-
-            // الوصف
             Text(
-              "Shop the latest fashion trends, all in one place",
+              "Shop the latest fashion trends, all in one place".tr(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20.sp,
-                color: Colors.blue.withOpacity(0.7), // الأزرق شفاف شوي
+                color: Colors.blue.withOpacity(0.7),
               ),
             ),
 
             SizedBox(height: 40.h),
-
-            // أزرار Login & Register
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // الأزرق
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.r),
@@ -75,7 +69,7 @@ class WelcomeScreen extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      "Login",
+                      "Login".tr(),
                       style: TextStyle(fontSize: 16.sp),
                     ),
                   ),
@@ -84,7 +78,7 @@ class WelcomeScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // الأزرق
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.r),
@@ -100,7 +94,7 @@ class WelcomeScreen extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      "Register",
+                      "Register".tr(),
                       style: TextStyle(fontSize: 16.sp),
                     ),
                   ),

@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../AuthProvider/authProvider.dart';
 import '../utels/navigation_buttom.dart';
+import 'login_page.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -38,37 +40,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               SizedBox(height: 40.h),
-
-              // Title
               Text(
-                "Create Account",
+                "Create Account".tr(),
                 style: TextStyle(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),
-
               SizedBox(height: 10.h),
-
-              // Subtitle
               Text(
-                "Create an account so you can explore all the existing jobs",
+                "Create an account so you can explore all the prodect".tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: colors.onSurface.withOpacity(0.7),
                   fontSize: 16.sp,
                 ),
               ),
-
               SizedBox(height: 30.h),
-
-              /// Email
               TextField(
                 controller: emailController,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Email",
+                  hintText: "Email".tr(),
                   hintStyle: TextStyle(
                     color: colors.onSurface.withOpacity(0.5),
                   ),
@@ -82,16 +76,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 15.h),
-
-              /// Password
               TextField(
                 controller: passwordController,
                 obscureText: _obscurePassword,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Password",
+                  hintText: "Password".tr(),
                   hintStyle: TextStyle(
                     color: colors.onSurface.withOpacity(0.5),
                   ),
@@ -118,16 +109,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 15.h),
-
-              /// Confirm Password
               TextField(
                 controller: confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Confirm Password",
+                  hintText: "Confirm Password".tr(),
                   hintStyle: TextStyle(
                     color: colors.onSurface.withOpacity(0.5),
                   ),
@@ -154,10 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 25.h),
-
-              /// Sign Up Button
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
@@ -173,18 +158,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (passwordController.text !=
                         confirmPasswordController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Passwords do not match"),
+                       SnackBar(
+                          content: Text("Passwords do not match".tr() ),
                         ),
                       );
                       return;
                     }
-
                     String? result = await authProvider.signUp(
                       emailController.text.trim(),
                       passwordController.text.trim(),
                     );
-
                     if (result != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(result)),
@@ -193,13 +176,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ButtomNavigationBar(),
+                          builder: (context) => LoginScreen(),
                         ),
                       );
                     }
                   },
                   child: Text(
-                    "Sign up",
+                    "Sign up".tr(),
                     style: TextStyle(fontSize: 16.sp),
                   ),
                 ),
