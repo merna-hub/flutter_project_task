@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_project_task/view/welcome_page.dart';
@@ -7,6 +8,7 @@ import '../AuthProvider/authProvider.dart';
 import '../themes/app_colors.dart';
 import '../themes/theme_provider.dart';
 import '../utels/navigation_buttom.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,20 +18,45 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   late String selectedLang;
+  File? _profileImage;
+  final ImagePicker _picker = ImagePicker();
 
+  // Pick image from gallery and upload
+  Future<void> _pickImage(AuthProvider authProvider) async {
+    final XFile? image =
+    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+
+    if (image != null) {
+      setState(() => _profileImage = File(image.path));
+      await authProvider.uploadProfileImage(_profileImage!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-
     selectedLang = context.locale.languageCode;
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       backgroundColor: AppColors.background(themeProvider.isDark),
-
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ButtomNavigationBar()));
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppColors.textPrimary(themeProvider.isDark),
+          ),
+        ),
+        title: Text("profile".tr()),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -50,27 +77,109 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Profile Photo
-                  CircleAvatar(
-                    radius: 55.r,
-                    backgroundColor: AppColors.cardAlt(themeProvider.isDark),
-                    child: Icon(
-                      Icons.person,
-                      size: 70.r,
-                      color: Colors.grey[700],
-                    ),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 55.r,
+                        backgroundColor:
+                        AppColors.cardAlt(themeProvider.isDark),
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : (authProvider.profileImageUrl != null
+                            ? NetworkImage(authProvider.profileImageUrl!)
+                        as ImageProvider
+                            : null),
+                        child: (_profileImage == null &&
+                            authProvider.profileImageUrl == null)
+                            ? Icon(Icons.person,
+                            size: 70.r, color: Colors.grey[700])
+                            : null,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () => _pickImage(authProvider),
+                          child: CircleAvatar(
+                            radius: 18.r,
+                            backgroundColor: Colors.blue,
+                            child: Icon(Icons.edit,
+                                size: 20.r, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 15.h),
-                  Text(
-                    'Merna Eid',
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary(themeProvider.isDark),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          authProvider.userName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color:
+                            AppColors.textPrimary(themeProvider.isDark),
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+                      InkWell(
+                        onTap: () async {
+                          final TextEditingController dialogController =
+                          TextEditingController(text: authProvider.userName);
+
+                          final newName = await showDialog<String>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Edit Username".tr()),
+                              content: TextField(
+                                controller: dialogController,
+                                autofocus: true,
+                                decoration: InputDecoration(
+                                    hintText: "Enter new username".tr()),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, null),
+                                  child: Text("Cancel".tr()),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                        context, dialogController.text.trim());
+                                  },
+                                  child: Text("Update".tr()),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (newName != null && newName.isNotEmpty) {
+                            await authProvider.updateUsername(newName);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text("Username updated".tr())),
+                            );
+                          }
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          size: 25.r,
+                          color: AppColors.textPrimary(themeProvider.isDark),
+                        ),
+                      ),
+                    ],
                   ),
+
+                  SizedBox(height: 10.h),
                   Text(
-                    'Flutter dev.',
+                    authProvider.userEmail,
                     style: TextStyle(
                       color: AppColors.textSecondary(themeProvider.isDark),
                       fontSize: 15.sp,
@@ -89,12 +198,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   SizedBox(height: 10.h),
+
                   RadioListTile<String>(
                     value: 'en',
                     groupValue: selectedLang,
                     title: Row(
                       children: [
-                        Image.asset('assets/images/Flag_of_the_United_States.svg.png', width: 35.w),
+                        Image.asset(
+                          'assets/images/Flag_of_the_United_States.svg.png',
+                          width: 35.w,
+                        ),
                         SizedBox(width: 10.w),
                         Text(
                           'English'.tr(),
@@ -115,7 +228,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     groupValue: selectedLang,
                     title: Row(
                       children: [
-                        Image.asset('assets/images/egypt.jpg', width: 35.w),
+                        Image.asset(
+                          'assets/images/egypt.jpg',
+                          width: 35.w,
+                        ),
                         SizedBox(width: 10.w),
                         Text(
                           'Arabic'.tr(),
@@ -145,18 +261,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     onChanged: (value) => themeProvider.toggleTheme(value),
                   ),
                   ElevatedButton(
-                      onPressed: () async {
-                        await authProvider.signOut();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Logged out successfully")),
-                        );
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => WelcomeScreen()),
-                              (route) => false,
-                        );
-                      },
-                      child: Text("Logout"))
+                    onPressed: () async {
+                      await authProvider.signOut();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("Logged out successfully")),
+                      );
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => WelcomeScreen()),
+                            (route) => false,
+                      );
+                    },
+                    child: Text("Logout"),
+                  ),
                 ],
               ),
             ),

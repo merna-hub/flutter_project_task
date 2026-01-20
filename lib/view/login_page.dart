@@ -136,12 +136,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () async {
                   String? result = await authProvider.signInWithGoogle();
                   if (result != null) {
+                  if (result != null) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
                   } else {
                     Navigator.pushReplacement(
                         context, MaterialPageRoute(builder: (context) => ButtomNavigationBar()));
                   }
-                },
+                }},
                 child: Container(
                   width: 50.w,
                   height: 50.h,

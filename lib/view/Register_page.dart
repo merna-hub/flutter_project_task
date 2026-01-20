@@ -1,9 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../AuthProvider/authProvider.dart';
-import '../utels/navigation_buttom.dart';
 import 'login_page.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,10 +13,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-  TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -50,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 10.h),
               Text(
-                "Create an account so you can explore all the prodect".tr(),
+                "Create an account so you can explore all the products".tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: colors.onSurface.withOpacity(0.7),
@@ -58,14 +57,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(height: 30.h),
+
+              // Username
               TextField(
-                controller: emailController,
+                controller: usernameController,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
-                  hintText: "Email".tr(),
-                  hintStyle: TextStyle(
-                    color: colors.onSurface.withOpacity(0.5),
-                  ),
+                  hintText: "Username".tr(),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
@@ -77,15 +76,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(height: 15.h),
+
+              // Email
+              TextField(
+                controller: emailController,
+                style: TextStyle(color: colors.onSurface),
+                decoration: InputDecoration(
+                  hintText: "Email".tr(),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: colors.outline),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
+              ),
+              SizedBox(height: 15.h),
+
+              // Password
               TextField(
                 controller: passwordController,
                 obscureText: _obscurePassword,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
                   hintText: "Password".tr(),
-                  hintStyle: TextStyle(
-                    color: colors.onSurface.withOpacity(0.5),
-                  ),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
@@ -96,29 +114,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
                       color: colors.onSurface.withOpacity(0.7),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
+                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                   ),
                 ),
               ),
               SizedBox(height: 15.h),
+
+              // Confirm Password
               TextField(
                 controller: confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
                   hintText: "Confirm Password".tr(),
-                  hintStyle: TextStyle(
-                    color: colors.onSurface.withOpacity(0.5),
-                  ),
+                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
@@ -129,20 +141,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
                       color: colors.onSurface.withOpacity(0.7),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                    },
+                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                   ),
                 ),
               ),
               SizedBox(height: 25.h),
+
+              // Sign Up Button
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
@@ -155,29 +163,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    if (passwordController.text !=
-                        confirmPasswordController.text) {
+                    // Check fields
+                    if (usernameController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
-                          content: Text("Passwords do not match".tr() ),
-                        ),
+                        SnackBar(content: Text("Please enter a username".tr())),
                       );
                       return;
                     }
-                    String? result = await authProvider.signUp(
-                      emailController.text.trim(),
-                      passwordController.text.trim(),
-                    );
-                    if (result != null) {
+                    if (emailController.text.trim().isEmpty ||
+                        passwordController.text.trim().isEmpty ||
+                        confirmPasswordController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(result)),
+                        SnackBar(content: Text("Please fill all fields".tr())),
                       );
-                    } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
+                      return;
+                    }
+                    if (passwordController.text != confirmPasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Passwords do not match".tr())),
+                      );
+                      return;
+                    }
+
+                    // Call signUp
+                    try {
+                      String? result = await authProvider.signUp(
+                        emailController.text.trim(),
+                        passwordController.text.trim(),
+                        usernameController.text.trim(),
+                      );
+
+                      if (result != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(result)),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => LoginScreen()),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Error: $e")),
                       );
                     }
                   },

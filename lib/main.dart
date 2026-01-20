@@ -15,6 +15,8 @@ import 'utels/navigation_buttom.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp();
 
   runApp(
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData.dark(),
             themeMode: themeProvider.themeMode,
 
+            // Initial screen
             home: const WelcomeScreen(),
           );
         },

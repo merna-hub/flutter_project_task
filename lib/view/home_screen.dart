@@ -284,7 +284,9 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: Image.asset(brands[index]["image"]!),
+                      child: ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(40),
+                          child: Image.asset(brands[index]["image"]!,)),
                     ),
                   ),
                 );

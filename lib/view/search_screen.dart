@@ -1,20 +1,35 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_task/Controller/cart_controller.dart';
+import 'package:flutter_project_task/themes/app_colors.dart';
+import 'package:flutter_project_task/view/home_screen.dart';
 import 'package:provider/provider.dart';
 import '../Controller/favorite_controller.dart';
 import '../Controller/product_controller.dart';
+import '../themes/theme_provider.dart';
+import '../utels/navigation_buttom.dart';
 import 'PopularBrands_Page.dart';
+import 'item_details_page.dart';
 
 class ProductSearchScreen extends StatelessWidget {
   const ProductSearchScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ProductController>(context);
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDark;
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> ButtomNavigationBar()));
+          },
+       icon:  Icon(Icons.arrow_back,color: AppColors.textPrimary(isDark),)),
+
         title:  Text("Search".tr(),),
         automaticallyImplyLeading: false,
       ),
@@ -72,12 +87,7 @@ class ProductSearchScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => PopularBrandsPage(
-                          brandImage: product.image,
-                          productName: product.title,
-                          rating: product.rating,
-                          productDescription: product.description,
-                        ),
+                        builder: (_) =>  ItemDetailsPage(product: product,)
                       ),
                     );
                   },
