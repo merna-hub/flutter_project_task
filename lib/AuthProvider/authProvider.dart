@@ -16,10 +16,10 @@ class AuthProvider extends ChangeNotifier {
   bool isLoading = false;
 
   AuthProvider() {
-    _auth.authStateChanges().listen((firebaseUser) {
+    _auth.authStateChanges().listen((firebaseUser) async {
       user = firebaseUser;
       if (user != null) {
-        fetchUserData();
+        await fetchUserData();
       } else {
         username = null;
         profileImageUrl = null;
@@ -33,7 +33,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> signUp(String email, String password,String generatedUsername) async {
+  Future<String?> signUp(
+      String email, String password, String generatedUsername) async {
     try {
       _setLoading(true);
 
@@ -41,8 +42,8 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
-      user = userCredential.user;
 
+      user = userCredential.user;
 
       await _firestore.collection('users').doc(user!.uid).set({
         'uid': user!.uid,
@@ -55,25 +56,14 @@ class AuthProvider extends ChangeNotifier {
       username = generatedUsername;
       profileImageUrl = null;
 
-      _setLoading(false);
       return null;
     } on FirebaseAuthException catch (e) {
-      _setLoading(false);
       return e.message;
+    } finally {
+      _setLoading(false);
     }
   }
 
-  Future<void> Update(String userId, String newName) async {
-    try {
-      await _firestore.collection('users').doc(userId).update({
-        'name': newName,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-      print('updated successfully!');
-    } catch (e) {
-      print('Error updating user: $e #################');
-    }
-  }
   Future<String?> signIn(String email, String password) async {
     try {
       _setLoading(true);
@@ -85,25 +75,12 @@ class AuthProvider extends ChangeNotifier {
 
       user = userCredential.user;
       await fetchUserData();
-
-      _setLoading(false);
       return null;
     } on FirebaseAuthException catch (e) {
-      _setLoading(false);
       return e.message;
+    } finally {
+      _setLoading(false);
     }
-  }
-
-  Future<void> fetchUserData() async {
-    if (user == null) return;
-
-    final doc = await _firestore.collection('users').doc(user!.uid).get();
-
-    if (doc.exists) {
-      username = doc['username'] ?? "No Username";
-      profileImageUrl = doc['profileImage'];
-    }
-    notifyListeners();
   }
 
   Future<String?> signInWithGoogle() async {
@@ -111,10 +88,7 @@ class AuthProvider extends ChangeNotifier {
       _setLoading(true);
 
       final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        _setLoading(false);
-        return 'Login cancelled';
-      }
+      if (googleUser == null) return 'Login cancelled';
 
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -122,13 +96,17 @@ class AuthProvider extends ChangeNotifier {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await _auth.signInWithCredential(credential);
+      final userCredential =
+      await _auth.signInWithCredential(credential);
       user = userCredential.user;
 
-      final doc = await _firestore.collection('users').doc(user!.uid).get();
+      final doc =
+      await _firestore.collection('users').doc(user!.uid).get();
 
       if (!doc.exists) {
-        String googleUsername = user!.displayName ?? user!.email!.split('@')[0];
+        String googleUsername =
+            user!.displayName ?? user!.email!.split('@')[0];
+
         await _firestore.collection('users').doc(user!.uid).set({
           'uid': user!.uid,
           'username': googleUsername,
@@ -136,18 +114,33 @@ class AuthProvider extends ChangeNotifier {
           'profileImage': null,
           'createdAt': Timestamp.now(),
         });
+
         username = googleUsername;
         profileImageUrl = null;
       } else {
-        username = doc['username'] ?? "No Username";
-        profileImageUrl = doc['profileImage'];
+        username = doc.data()?['username'];
+        profileImageUrl = doc.data()?['profileImage'];
       }
 
-      _setLoading(false);
       return null;
     } catch (e) {
-      _setLoading(false);
       return e.toString();
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> fetchUserData() async {
+    if (user == null) return;
+
+    final doc =
+    await _firestore.collection('users').doc(user!.uid).get();
+
+    if (doc.exists) {
+      final data = doc.data();
+      username = data?['username'] ?? "No Username";
+      profileImageUrl = data?['profileImage'];
+      notifyListeners();
     }
   }
 
@@ -156,6 +149,7 @@ class AuthProvider extends ChangeNotifier {
 
     await _firestore.collection('users').doc(user!.uid).update({
       'username': newUsername,
+      'updatedAt': FieldValue.serverTimestamp(),
     });
 
     username = newUsername;
@@ -165,21 +159,32 @@ class AuthProvider extends ChangeNotifier {
   Future<void> uploadProfileImage(File image) async {
     if (user == null) return;
 
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('users/${user!.uid}/profile.jpg');
+    try {
+      _setLoading(true);
 
-    await ref.putFile(image);
-    final url = await ref.getDownloadURL();
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('users/${user!.uid}/profile.jpg');
 
-    await _firestore.collection('users').doc(user!.uid).update({
-      'profileImage': url,
-    });
+      await ref.putFile(image);
+      debugPrint("✅ Image uploaded");
 
-    profileImageUrl = url;
-    notifyListeners();
+      final url = await ref.getDownloadURL();
+      debugPrint("✅ Image URL: $url");
+
+      await _firestore.collection('users').doc(user!.uid).update({
+        'profileImage': url,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      profileImageUrl = "$url?ts=${DateTime.now().millisecondsSinceEpoch}";
+      notifyListeners();
+    } catch (e) {
+      debugPrint("❌ Upload image error: $e");
+    } finally {
+      _setLoading(false);
+    }
   }
-
 
   Future<void> signOut() async {
     await _auth.signOut();

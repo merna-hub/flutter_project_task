@@ -9,6 +9,7 @@ import 'AuthProvider/authProvider.dart';
 import 'Controller/product_controller.dart';
 import 'Controller/cart_controller.dart';
 import 'Controller/favorite_controller.dart';
+import 'Controller/profile_provider.dart';
 import 'utels/navigation_buttom.dart';
 
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SearchController()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

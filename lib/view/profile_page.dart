@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_project_task/view/welcome_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../AuthProvider/authProvider.dart';
+import '../Controller/profile_provider.dart';
 import '../themes/app_colors.dart';
 import '../themes/theme_provider.dart';
 import '../utels/navigation_buttom.dart';
-import 'package:image_picker/image_picker.dart';
+import '../AuthProvider/authProvider.dart';
+import 'welcome_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,25 +19,20 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late String selectedLang;
-  File? _profileImage;
-  final ImagePicker _picker = ImagePicker();
 
-  // Pick image from gallery and upload
-  Future<void> _pickImage(AuthProvider authProvider) async {
-    final XFile? image =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
-
-    if (image != null) {
-      setState(() => _profileImage = File(image.path));
-      await authProvider.uploadProfileImage(_profileImage!);
-    }
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    provider.loadImage(); // load image from SharedPreferences
   }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    selectedLang = context.locale.languageCode;
+    final profileProvider = Provider.of<ProfileProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
+    selectedLang = context.locale.languageCode;
 
     return Scaffold(
       backgroundColor: AppColors.background(themeProvider.isDark),
@@ -45,9 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ButtomNavigationBar()));
+              context,
+              MaterialPageRoute(builder: (context) => ButtomNavigationBar()),
+            );
           },
           icon: Icon(
             Icons.arrow_back,
@@ -75,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Stack(
                     children: [
@@ -83,14 +77,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         radius: 55.r,
                         backgroundColor:
                         AppColors.cardAlt(themeProvider.isDark),
-                        backgroundImage: _profileImage != null
-                            ? FileImage(_profileImage!)
-                            : (authProvider.profileImageUrl != null
-                            ? NetworkImage(authProvider.profileImageUrl!)
-                        as ImageProvider
-                            : null),
-                        child: (_profileImage == null &&
-                            authProvider.profileImageUrl == null)
+                        backgroundImage: profileProvider.profileImage != null
+                            ? FileImage(profileProvider.profileImage!)
+                            : AssetImage('assets/images/default_profile.png')
+                        as ImageProvider,
+                        child: profileProvider.profileImage == null
                             ? Icon(Icons.person,
                             size: 70.r, color: Colors.grey[700])
                             : null,
@@ -99,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         bottom: 0,
                         right: 0,
                         child: InkWell(
-                          onTap: () => _pickImage(authProvider),
+                          onTap: () => profileProvider.pickImage(),
                           child: CircleAvatar(
                             radius: 18.r,
                             backgroundColor: Colors.blue,
@@ -119,8 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           authProvider.userName,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color:
-                            AppColors.textPrimary(themeProvider.isDark),
+                            color: AppColors.textPrimary(themeProvider.isDark),
                             fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -129,9 +119,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(width: 10.w),
                       InkWell(
                         onTap: () async {
-                          final TextEditingController dialogController =
+                          final dialogController =
                           TextEditingController(text: authProvider.userName);
-
                           final newName = await showDialog<String>(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -140,12 +129,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                 controller: dialogController,
                                 autofocus: true,
                                 decoration: InputDecoration(
-                                    hintText: "Enter new username".tr()),
+                                  hintText: "Enter new username".tr(),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide:
+                                    const BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                        color: Colors.purple, width: 2),
+                                  ),
+                                ),
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, null),
+                                  onPressed: () => Navigator.pop(context, null),
                                   child: Text("Cancel".tr()),
                                 ),
                                 TextButton(
@@ -153,18 +154,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Navigator.pop(
                                         context, dialogController.text.trim());
                                   },
-                                  child: Text("Update".tr()),
+                                  child: Text(
+                                    "Update".tr(),
+                                  ),
                                 ),
                               ],
                             ),
                           );
-
                           if (newName != null && newName.isNotEmpty) {
                             await authProvider.updateUsername(newName);
-
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                  content: Text("Username updated".tr())),
+                                backgroundColor: Colors.green,
+                                content: Text(
+                                  "Username updated ✔".tr(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
                             );
                           }
                         },
@@ -176,7 +182,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 10.h),
                   Text(
                     authProvider.userEmail,
@@ -197,27 +202,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.h),
-
                   RadioListTile<String>(
                     value: 'en',
                     groupValue: selectedLang,
-                    title: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/Flag_of_the_United_States.svg.png',
-                          width: 35.w,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          'English'.tr(),
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: AppColors.textPrimary(themeProvider.isDark),
-                          ),
-                        ),
-                      ],
-                    ),
+                    title:Text('English').tr(),
                     onChanged: (value) {
                       setState(() => selectedLang = value!);
                       context.setLocale(const Locale('en'));
@@ -226,54 +214,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   RadioListTile<String>(
                     value: 'ar',
                     groupValue: selectedLang,
-                    title: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/egypt.jpg',
-                          width: 35.w,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          'Arabic'.tr(),
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: AppColors.textPrimary(themeProvider.isDark),
-                          ),
-                        ),
-                      ],
-                    ),
+                    title: Text('Arabic'.tr()),
                     onChanged: (value) {
                       setState(() => selectedLang = value!);
                       context.setLocale(const Locale('ar'));
                     },
                   ),
-                  SizedBox(height: 20.h),
                   SwitchListTile(
-                    title: Text(
-                      "dark mode".tr(),
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textPrimary(themeProvider.isDark),
-                      ),
-                    ),
+                    title: Text("dark mode".tr()),
                     value: themeProvider.isDark,
-                    onChanged: (value) => themeProvider.toggleTheme(value),
+                    onChanged: themeProvider.toggleTheme,
                   ),
                   ElevatedButton(
                     onPressed: () async {
                       await authProvider.signOut();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Logged out successfully")),
-                      );
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (_) => WelcomeScreen()),
                             (route) => false,
                       );
                     },
-                    child: Text("Logout"),
+                    child: Text("Logout".tr()),
                   ),
                 ],
               ),
