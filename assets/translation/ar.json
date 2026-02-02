@@ -34,10 +34,10 @@
     "Search": "بحث",
     "Item Details": "تفاصيل العنصر",
     "ZARA": "زارا",
-    "H&M ": " H&M",
-    "Lacoste ": " لاكوست",
-    "Shein": " شي ان",
-    "Lc waikiki": "إل سي ويكيكي",
+    "H&M ": " إتش آند إم ",
+    "Lacoste ": " لاكوست ",
+    "Shein": "شين",
+    "Lc waikiki": "إل سي وايكيكي",
   "Zara is a leading Spanish fashion brand, part of the Inditex group. Founded in 1974, it is known for its fast fashion, offering trendy and affordable clothing for men, women, and children. Zara quickly brings the latest styles to stores worldwide and focuses on modern, minimalist designs. Recently, it has also been working on sustainability, using eco-friendly materials and practices. Zara combines style, quality, and accessibility, making it popular globally.": "زارا هي علامة أزياء إسبانية رائدة، وهي جزء من مجموعة إنديتكس. تأسست في عام 1974، وتشتهر بالأزياء السريعة، حيث تقدم ملابس عصرية وبأسعار معقولة للرجال والنساء والأطفال. تقوم زارا بسرعة بإيصال أحدث الصيحات إلى متاجرها حول العالم وتركز على التصاميم الحديثة والبسيطة. مؤخرًا، بدأت أيضًا في العمل على الاستدامة من خلال استخدام مواد وممارسات صديقة للبيئة. تجمع زارا بين الأناقة والجودة وسهولة الوصول، مما يجعلها تحظى بشعبية كبيرة على مستوى العالم.",
   "H&M (Hennes & Mauritz) is a Swedish global fashion brand founded in 1947. It offers affordable, trendy clothing for men, women, and children, along with accessories and home products. H&M is known for its fast fashion model, bringing new styles quickly to stores worldwide, and it is increasingly focusing on sustainability by using eco-friendly materials and promoting recycling programs": "H&M (Hennes & Mauritz) هي علامة أزياء عالمية سويدية تأسست عام 1947. تقدم ملابس عصرية وبأسعار معقولة للرجال والنساء والأطفال، بالإضافة إلى الإكسسوارات ومنتجات المنزل. تشتهر H&M بنموذج الأزياء السريعة، حيث تقوم بإيصال أحدث الصيحات بسرعة إلى المتاجر حول العالم، وتركز بشكل متزايد على الاستدامة من خلال استخدام مواد صديقة للبيئة وتشجيع برامج إعادة التدوير.",
   "Lacoste is a French clothing brand founded in 1933 by tennis player René Lacoste. It is famous for its polo shirts with the iconic crocodile logo and offers clothing, footwear, accessories, and fragrances for men, women, and children. Lacoste is known for its classic, sporty, and elegant style, combining comfort with luxury. The brand represents timeless fashion and quality worldwide.": "لاكوست هي علامة تجارية فرنسية للملابس تأسست في عام 1933 على يد لاعب التنس رينيه لاكوست. تشتهر بقميص البولو الذي يحمل شعار التمساح الشهير، وتقدم ملابس وأحذية وإكسسوارات وعطور للرجال والنساء والأطفال. تعرف لاكوست بأسلوبها الكلاسيكي والرياضي والأنيق، حيث تجمع بين الراحة والفخامة. تمثل العلامة التجارية الموضة الخالدة والجودة على مستوى العالم.",
@@ -77,5 +77,10 @@
   "price": "السعر",
   "category": "الفئة",
   "rating": "التقييم",
-  "description": "الوصف"
+  "description": "الوصف",
+  "Zara is a leading Spanish fashion brand...": "زارا هي علامة أزياء إسبانية رائدة...",
+    "H&M (Hennes & Mauritz) is a Swedish global fashion brand...": "H&M (Hennes & Mauritz) هي علامة أزياء عالمية سويدية...",
+    "Lacoste is a French clothing brand founded in 1933...": "لاكوست هي علامة تجارية فرنسية للملابس تأسست في عام 1933...",
+    "Shein is a Chinese online fashion retailer founded in 2008...": "Shein هي شركة تجارة إلكترونية صينية للأزياء تأسست في عام 2008...",
+    "LC Waikiki is a Turkish fashion brand founded in 1988...": "LC Waikiki هي علامة تجارية تركية للأزياء تأسست في عام 1988..."
 }
