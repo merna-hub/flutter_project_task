@@ -33,6 +33,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ================= SIGN UP =================
   Future<String?> signUp(
       String email, String password, String generatedUsername) async {
     try {
@@ -50,7 +51,7 @@ class AuthProvider extends ChangeNotifier {
         'username': generatedUsername,
         'email': email,
         'profileImage': null,
-        'createdAt': Timestamp.now(),
+        'createdAt': FieldValue.serverTimestamp(),
       });
 
       username = generatedUsername;
@@ -64,6 +65,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // ================= SIGN IN =================
   Future<String?> signIn(String email, String password) async {
     try {
       _setLoading(true);
@@ -75,6 +77,8 @@ class AuthProvider extends ChangeNotifier {
 
       user = userCredential.user;
       await fetchUserData();
+      notifyListeners();
+
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -83,14 +87,19 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // ================= GOOGLE SIGN IN =================
   Future<String?> signInWithGoogle() async {
     try {
       _setLoading(true);
 
       final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return 'Login cancelled';
+      if (googleUser == null) {
+        _setLoading(false);
+        return 'Login cancelled';
+      }
 
       final googleAuth = await googleUser.authentication;
+
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -98,38 +107,41 @@ class AuthProvider extends ChangeNotifier {
 
       final userCredential =
       await _auth.signInWithCredential(credential);
+
       user = userCredential.user;
+      if (user == null) return 'User is null';
 
-      final doc =
-      await _firestore.collection('users').doc(user!.uid).get();
+      final userDoc =
+      _firestore.collection('users').doc(user!.uid);
 
-      if (!doc.exists) {
-        String googleUsername =
-            user!.displayName ?? user!.email!.split('@')[0];
+      final snapshot = await userDoc.get();
 
-        await _firestore.collection('users').doc(user!.uid).set({
+      if (!snapshot.exists) {
+        await userDoc.set({
           'uid': user!.uid,
-          'username': googleUsername,
+          'username':
+          user!.displayName ?? user!.email?.split('@')[0],
           'email': user!.email,
-          'profileImage': null,
-          'createdAt': Timestamp.now(),
+          'profileImage': user!.photoURL,
+          'createdAt': FieldValue.serverTimestamp(),
         });
-
-        username = googleUsername;
-        profileImageUrl = null;
-      } else {
-        username = doc.data()?['username'];
-        profileImageUrl = doc.data()?['profileImage'];
       }
 
+      await fetchUserData();
+      notifyListeners();
+
       return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message ?? 'Google sign-in error';
     } catch (e) {
+      debugPrint('❌ Google Sign-In Error: $e');
       return e.toString();
     } finally {
       _setLoading(false);
     }
   }
 
+  // ================= FETCH USER DATA =================
   Future<void> fetchUserData() async {
     if (user == null) return;
 
@@ -140,10 +152,10 @@ class AuthProvider extends ChangeNotifier {
       final data = doc.data();
       username = data?['username'] ?? "No Username";
       profileImageUrl = data?['profileImage'];
-      notifyListeners();
     }
   }
 
+  // ================= UPDATE USERNAME =================
   Future<void> updateUsername(String newUsername) async {
     if (user == null) return;
 
@@ -156,6 +168,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ================= UPLOAD PROFILE IMAGE =================
   Future<void> uploadProfileImage(File image) async {
     if (user == null) return;
 
@@ -167,17 +180,16 @@ class AuthProvider extends ChangeNotifier {
           .child('users/${user!.uid}/profile.jpg');
 
       await ref.putFile(image);
-      debugPrint("✅ Image uploaded");
 
       final url = await ref.getDownloadURL();
-      debugPrint("✅ Image URL: $url");
 
       await _firestore.collection('users').doc(user!.uid).update({
         'profileImage': url,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
-      profileImageUrl = "$url?ts=${DateTime.now().millisecondsSinceEpoch}";
+      profileImageUrl =
+      "$url?ts=${DateTime.now().millisecondsSinceEpoch}";
       notifyListeners();
     } catch (e) {
       debugPrint("❌ Upload image error: $e");
@@ -186,19 +198,25 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // ================= SIGN OUT =================
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
+
     user = null;
     username = null;
     profileImageUrl = null;
+
     notifyListeners();
   }
 
+  // ================= RESET PASSWORD =================
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
+  // ================= GETTERS =================
+  bool get isLoggedIn => user != null;
   String get userEmail => user?.email ?? "No Email";
   String get userName => username ?? "No Username";
   String? get userProfileImage => profileImageUrl;

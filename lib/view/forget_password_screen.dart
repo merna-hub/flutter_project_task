@@ -1,17 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import '../AuthProvider/authProvider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
 
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  final TextEditingController emailController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -21,10 +31,7 @@ class ForgetPasswordScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           "Forgot Password".tr(),
-          style: TextStyle(
-            fontSize: 18.sp,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 18.sp, color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -36,7 +43,6 @@ class ForgetPasswordScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 80.h),
-
                 Text(
                   "Reset Password".tr(),
                   style: TextStyle(
@@ -45,9 +51,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     color: isDark ? Colors.white : Colors.blue,
                   ),
                 ),
-
                 SizedBox(height: 8.h),
-
                 Text(
                   "Enter your email to receive a reset link".tr(),
                   textAlign: TextAlign.center,
@@ -56,9 +60,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     color: isDark ? Colors.grey[400] : Colors.grey,
                   ),
                 ),
-
                 SizedBox(height: 40.h),
-
                 Container(
                   decoration: BoxDecoration(
                     color: isDark ? Colors.grey[900] : Colors.white,
@@ -89,10 +91,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 30.h),
-
-                SizedBox(
+                isLoading
+                    ? const CircularProgressIndicator()
+                    : SizedBox(
                   width: double.infinity,
                   height: 55.h,
                   child: ElevatedButton(
@@ -111,15 +113,19 @@ class ForgetPasswordScreen extends StatelessWidget {
                         return;
                       }
 
-                      try {
-                        await authProvider.resetPassword(
-                          emailController.text.trim(),
-                        );
+                      setState(() => isLoading = true);
 
+                      try {
+                        // إرسال الإيميل مباشرة عن طريق FirebaseAuth
+                        await FirebaseAuth.instance
+                            .sendPasswordResetEmail(
+                            email: emailController.text.trim());
+
+                        // إشعار المستخدم أن الإيميل وصل
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor:
-                            isDark ? Colors.grey[800] : Colors.black,
+                            isDark ? Colors.grey[800] : Colors.green,
                             content: Text(
                               "Password reset email sent! Check your inbox 📧"
                                   .tr(),
@@ -132,14 +138,15 @@ class ForgetPasswordScreen extends StatelessWidget {
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            backgroundColor:
-                            isDark ? Colors.grey[800] : Colors.red,
+                            backgroundColor: Colors.red,
                             content: Text(
                               "Error: ${e.toString()}".tr(),
                               style: TextStyle(fontSize: 14.sp),
                             ),
                           ),
                         );
+                      } finally {
+                        setState(() => isLoading = false);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -159,9 +166,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20.h),
-
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
@@ -180,3 +185,4 @@ class ForgetPasswordScreen extends StatelessWidget {
     );
   }
 }
+

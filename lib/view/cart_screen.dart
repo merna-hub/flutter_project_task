@@ -48,7 +48,6 @@ class CartPage extends StatelessWidget {
           SizedBox(width: 10.w),
         ],
       ),
-
       body: cartItems.isEmpty
           ? Center(
         child: Text(
@@ -84,12 +83,10 @@ class CartPage extends StatelessWidget {
                     color: isDark ? Colors.white : Colors.black,
                   )),
             ),
-
             SizedBox(height: 10.h),
-            infoRow("total items".tr(), "${cartItems.length}", isDark),
+            infoRow("total items".tr(), "${cartProvider.totalQuantity}", isDark),
             infoRow("shipping fee".tr(), "\$5.00", isDark),
             infoRow("taxes".tr(), "\$2.00", isDark),
-
             const Divider(thickness: 1.2),
             SizedBox(height: 20.h),
             Row(
@@ -109,22 +106,21 @@ class CartPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            "Proceeding to checkout: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}".tr()),
+                            "Proceeding to checkout: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}"
+                                .tr()),
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    isDark ? Colors.blueGrey : Colors.blue[800],
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
+                    backgroundColor: isDark ? Colors.blueGrey : Colors.blue[800],
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child:  Text(
+                  child: Text(
                     "checkout".tr(),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ).tr(),
                 ),
               ],
@@ -158,7 +154,6 @@ class CartPage extends StatelessWidget {
             Image.network(item.product.image,
                 width: 70.w, height: 70.h, fit: BoxFit.cover),
             SizedBox(width: 15.w),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,8 +173,7 @@ class CartPage extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.remove_circle_outline,
-                      color: Colors.redAccent),
+                  icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
                   onPressed: () {
                     cartProvider.decreaseQuantity(item.product);
                   },
@@ -193,8 +187,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle_outline,
-                      color: Colors.green),
+                  icon: const Icon(Icons.add_circle_outline, color: Colors.green),
                   onPressed: () {
                     cartProvider.addToCart(item.product);
                   },
@@ -212,6 +205,7 @@ class CartPage extends StatelessWidget {
       ),
     );
   }
+
   static Widget infoRow(String title, String value, bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),

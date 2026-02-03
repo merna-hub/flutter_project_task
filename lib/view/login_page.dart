@@ -37,18 +37,24 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               SizedBox(height: 40.h),
               Text("Login here".tr(),
-                  style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold, color: Colors.blue)),
+                  style: TextStyle(
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue)),
               SizedBox(height: 10.h),
               Text("Welcome back you".tr(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: colors.onSurface.withOpacity(0.7), fontSize: 16.sp)),
+                  style: TextStyle(
+                      color: colors.onSurface.withOpacity(0.7),
+                      fontSize: 16.sp)),
               SizedBox(height: 30.h),
               TextField(
                 controller: emailController,
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
                   hintText: "Email".tr(),
-                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
+                  hintStyle:
+                  TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
@@ -66,7 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(color: colors.onSurface),
                 decoration: InputDecoration(
                   hintText: "Password".tr(),
-                  hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.5)),
+                  hintStyle:
+                  TextStyle(color: colors.onSurface.withOpacity(0.5)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: colors.outline),
@@ -78,9 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   suffixIcon: IconButton(
                     splashRadius: 20,
                     icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: colors.onSurface.withOpacity(0.7)),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                   ),
                 ),
               ),
@@ -90,13 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextButton(
                   onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const ForgetPasswordScreen()),
                   ),
-                  child:  Text("Forgot Password?".tr()),
+                  child: Text("Forgot Password?".tr()),
                 ),
               ),
               SizedBox(height: 20.h),
 
+              // ====== Sign in with Email ======
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
@@ -104,45 +116,54 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.r)),
                   ),
                   onPressed: () async {
-                    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                          SnackBar(
-                              content: Text(
-                                  "Please fill all fields".tr()))
-                      );
+                    if (emailController.text.isEmpty ||
+                        passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Please fill all fields".tr())));
                       return;
                     }
                     String? result = await authProvider.signIn(
-                        emailController.text.trim(), passwordController.text.trim());
+                        emailController.text.trim(),
+                        passwordController.text.trim());
                     if (result != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(result)));
                     } else {
                       Navigator.pushReplacement(
-                          context, MaterialPageRoute(builder: (context) => ButtomNavigationBar()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ButtomNavigationBar()));
                     }
                   },
-                  child: Text("Sign in".tr(), style: TextStyle(fontSize: 16.sp)),
+                  child:
+                  Text("Sign in".tr(), style: TextStyle(fontSize: 16.sp)),
                 ),
               ),
               SizedBox(height: 20.h),
               Text("Or continue with".tr(),
-                  style: TextStyle(fontSize: 14.sp, color: colors.onSurface.withOpacity(0.7))),
+                  style: TextStyle(
+                      fontSize: 14.sp,
+                      color: colors.onSurface.withOpacity(0.7))),
               SizedBox(height: 15.h),
+
+              // ====== Google Sign In ======
               GestureDetector(
                 onTap: () async {
-                  String? result = await authProvider.signInWithGoogle();
-                  if (result != null) {
-                  if (result != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
-                  } else {
+                  await authProvider.signInWithGoogle();
+                  if (authProvider.user != null) {
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (context) => ButtomNavigationBar()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ButtomNavigationBar()));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Google Sign In cancelled".tr())));
                   }
-                }},
+                },
                 child: Container(
                   width: 50.w,
                   height: 50.h,
@@ -151,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.blue),
                   ),
-                  child:Center(
+                  child: Center(
                       child: Icon(
                         Icons.g_mobiledata,
                         color: Colors.blue,

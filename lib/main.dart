@@ -16,6 +16,12 @@ import 'utels/navigation_buttom.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    runApp(const MyApp());
+  }
+
 
   // Initialize Firebase
   await Firebase.initializeApp();
