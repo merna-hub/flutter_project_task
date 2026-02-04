@@ -38,17 +38,23 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               SizedBox(height: 40.h),
-              Text("Login here".tr(),
-                  style: TextStyle(
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue)),
+              Text(
+                "Login here".tr(),
+                style: TextStyle(
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
               SizedBox(height: 10.h),
-              Text("Welcome back you".tr(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: colors.onSurface.withOpacity(0.7),
-                      fontSize: 16.sp)),
+              Text(
+                "Welcome back you".tr(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colors.onSurface.withOpacity(0.7),
+                  fontSize: 16.sp,
+                ),
+              ),
               SizedBox(height: 30.h),
               TextField(
                 controller: emailController,
@@ -87,10 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   suffixIcon: IconButton(
                     splashRadius: 20,
                     icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: colors.onSurface.withOpacity(0.7)),
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: colors.onSurface.withOpacity(0.7),
+                    ),
                     onPressed: () =>
                         setState(() => _obscurePassword = !_obscurePassword),
                   ),
@@ -103,7 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ForgetPasswordScreen()),
+                      builder: (context) => const ForgetPasswordScreen(),
+                    ),
                   ),
                   child: Text("Forgot Password?".tr()),
                 ),
@@ -117,63 +125,82 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r)),
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
                   ),
                   onPressed: () async {
                     if (emailController.text.isEmpty ||
                         passwordController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Please fill all fields".tr())));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Please fill all fields".tr()),
+                        ),
+                      );
                       return;
                     }
+
                     String? result = await authProvider.signIn(
-                        emailController.text.trim(),
-                        passwordController.text.trim());
+                      emailController.text.trim(),
+                      passwordController.text.trim(),
+                    );
+
                     if (result != null) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(result)));
                     } else {
                       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ButtomNavigationBar()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ButtomNavigationBar(),
+                        ),
+                      );
                     }
                   },
-                  child:
-                  Text("Sign in".tr(), style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Sign in".tr(),
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
                 ),
               ),
               SizedBox(height: 8.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Dont have an account? ".tr(),
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          color: colors.onSurface.withOpacity(0.7))),
+                  Text(
+                    "Dont have an account? ".tr(),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: colors.onSurface.withOpacity(0.7),
+                    ),
+                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RegisterScreen()),
+                          builder: (context) => const RegisterScreen(),
+                        ),
                       );
                     },
                     child: Text(
                       "Sign Up".tr(),
                       style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 5.h),
-              Text("Or".tr(),
-                  style: TextStyle(
-                      fontSize: 14.sp,
-                      color: colors.onSurface.withOpacity(0.7))),
+              Text(
+                "Or".tr(),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: colors.onSurface.withOpacity(0.7),
+                ),
+              ),
               SizedBox(height: 15.h),
               GestureDetector(
                 onTap: () async {
@@ -183,12 +210,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ButtomNavigationBar(),
+                        builder: (context) => const ButtomNavigationBar(),
                       ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Google Sign In failed".tr())),
+                      SnackBar(
+                        content: Text("Google Sign In failed".tr()),
+                      ),
                     );
                   }
                 },
@@ -201,11 +230,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: Border.all(color: Colors.blue),
                   ),
                   child: Center(
-                      child: Icon(
-                        Icons.g_mobiledata,
-                        color: Colors.blue,
-                        size: 30.sp,
-                      )),
+                    child: Icon(
+                      Icons.g_mobiledata,
+                      color: Colors.blue,
+                      size: 30.sp,
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -75,12 +75,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       CircleAvatar(
                         radius: 55.r,
-                        backgroundColor:
-                        AppColors.cardAlt(themeProvider.isDark),
+                        backgroundColor: AppColors.cardAlt(themeProvider.isDark),
                         backgroundImage: profileProvider.profileImage != null
                             ? FileImage(profileProvider.profileImage!)
-                            : AssetImage('assets/images/default_profile.png')
-                        as ImageProvider,
+                            : AssetImage('assets/images/default_profile.png') as ImageProvider,
                         child: profileProvider.profileImage == null
                             ? Icon(Icons.person,
                             size: 70.r, color: Colors.grey[700])
@@ -124,30 +122,44 @@ class _ProfilePageState extends State<ProfilePage> {
                           final newName = await showDialog<String>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text("Edit Username".tr()),
+                              backgroundColor: themeProvider.isDark
+                                  ? Colors.grey[850]
+                                  : Colors.white,
+                              title: Text("Edit Username".tr(),
+                                  style: TextStyle(
+                                      color: AppColors.textPrimary(themeProvider.isDark))),
                               content: TextField(
                                 controller: dialogController,
                                 autofocus: true,
                                 decoration: InputDecoration(
                                   hintText: "Enter new username".tr(),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: themeProvider.isDark
+                                      ? Colors.grey[900]
+                                      : Colors.grey[200],
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide:
-                                    const BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(
+                                      color: themeProvider.isDark ? Colors.white : Colors.black,
+                                    ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                        color: Colors.purple, width: 2),
+                                        color: Colors.blue, width: 2),
                                   ),
+                                ),
+                                style: TextStyle(
+                                  color: themeProvider.isDark ? Colors.white : Colors.black,
                                 ),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context, null),
-                                  child: Text("Cancel".tr()),
+                                  child: Text(
+                                    "Cancel".tr(),
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -156,6 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                   child: Text(
                                     "Update".tr(),
+                                    style: TextStyle(color: Colors.blue),
                                   ),
                                 ),
                               ],
@@ -205,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   RadioListTile<String>(
                     value: 'en',
                     groupValue: selectedLang,
-                    title:Text('English').tr(),
+                    title: Text('English').tr(),
                     onChanged: (value) {
                       setState(() => selectedLang = value!);
                       context.setLocale(const Locale('en'));
@@ -214,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   RadioListTile<String>(
                     value: 'ar',
                     groupValue: selectedLang,
-                    title: Text('Arabic'.tr()),
+                    title: Text('Arabic').tr(),
                     onChanged: (value) {
                       setState(() => selectedLang = value!);
                       context.setLocale(const Locale('ar'));
