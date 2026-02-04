@@ -163,7 +163,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    // Check fields
                     if (usernameController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Please enter a username".tr())),
@@ -185,7 +184,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return;
                     }
 
-                    // Call signUp
                     try {
                       String? result = await authProvider.signUp(
                         emailController.text.trim(),
@@ -214,6 +212,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(fontSize: 16.sp),
                   ),
                 ),
+              ),
+
+              SizedBox(height: 15.h),
+
+              // Already have account? Login
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Or Already have an account? ".tr(),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: colors.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      );
+                    },
+                    child: Text(
+                      "Login".tr(),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

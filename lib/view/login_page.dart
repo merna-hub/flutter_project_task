@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../AuthProvider/authProvider.dart';
 import '../utels/navigation_buttom.dart';
+import 'Register_page.dart';
 import 'forget_password_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -107,8 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 20.h),
-
-              // ====== Sign in with Email ======
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
@@ -143,25 +143,53 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text("Sign in".tr(), style: TextStyle(fontSize: 16.sp)),
                 ),
               ),
-              SizedBox(height: 20.h),
-              Text("Or continue with".tr(),
+              SizedBox(height: 8.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Dont have an account? ".tr(),
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          color: colors.onSurface.withOpacity(0.7))),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterScreen()),
+                      );
+                    },
+                    child: Text(
+                      "Sign Up".tr(),
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5.h),
+              Text("Or".tr(),
                   style: TextStyle(
                       fontSize: 14.sp,
                       color: colors.onSurface.withOpacity(0.7))),
               SizedBox(height: 15.h),
-
-              // ====== Google Sign In ======
               GestureDetector(
                 onTap: () async {
-                  await authProvider.signInWithGoogle();
-                  if (authProvider.user != null) {
+                  final user = await authProvider.signInWithGoogle();
+
+                  if (user != null) {
                     Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ButtomNavigationBar()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ButtomNavigationBar(),
+                      ),
+                    );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Google Sign In cancelled".tr())));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Google Sign In failed".tr())),
+                    );
                   }
                 },
                 child: Container(

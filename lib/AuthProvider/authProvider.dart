@@ -92,9 +92,11 @@ class AuthProvider extends ChangeNotifier {
     try {
       _setLoading(true);
 
+      // ⭐⭐⭐ ده أهم سطر
+      await _googleSignIn.signOut();
+
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        _setLoading(false);
         return 'Login cancelled';
       }
 
@@ -129,10 +131,10 @@ class AuthProvider extends ChangeNotifier {
 
       await fetchUserData();
       notifyListeners();
-
       return null;
     } on FirebaseAuthException catch (e) {
-      return e.message ?? 'Google sign-in error';
+      debugPrint("FirebaseAuthException: ${e.code}");
+      return e.message;
     } catch (e) {
       debugPrint('❌ Google Sign-In Error: $e');
       return e.toString();
