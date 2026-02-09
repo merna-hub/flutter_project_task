@@ -13,15 +13,20 @@ class AuthProvider extends ChangeNotifier {
   User? user;
   String? username;
   String? profileImageUrl;
+  String? email;
   bool isLoading = false;
 
   AuthProvider() {
     _auth.authStateChanges().listen((firebaseUser) async {
       user = firebaseUser;
       if (user != null) {
-        await fetchUserData();
+        username = user!.displayName ?? user!.email?.split('@')[0] ?? '';
+        email = user!.email ?? '';
+        profileImageUrl = user!.photoURL ?? '';
+        await fetchUserData(); // جلب بيانات إضافية من Firestore لو موجودة
       } else {
         username = null;
+        email = null;
         profileImageUrl = null;
       }
       notifyListeners();
@@ -55,8 +60,10 @@ class AuthProvider extends ChangeNotifier {
       });
 
       username = generatedUsername;
+      this.email = email;
       profileImageUrl = null;
 
+      notifyListeners();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -76,7 +83,12 @@ class AuthProvider extends ChangeNotifier {
       );
 
       user = userCredential.user;
-      await fetchUserData();
+      if (user != null) {
+        username = user!.displayName ?? user!.email?.split('@')[0] ?? '';
+        this.email = user!.email ?? '';
+        profileImageUrl = user!.photoURL ?? '';
+        await fetchUserData();
+      }
       notifyListeners();
 
       return null;
@@ -92,45 +104,42 @@ class AuthProvider extends ChangeNotifier {
     try {
       _setLoading(true);
 
-      // ⭐⭐⭐ ده أهم سطر
+      // تسجيل الخروج لو كان مستخدم سابق
       await _googleSignIn.signOut();
 
       final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        return 'Login cancelled';
-      }
+      if (googleUser == null) return 'Login cancelled';
 
       final googleAuth = await googleUser.authentication;
-
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final userCredential =
-      await _auth.signInWithCredential(credential);
-
+      final userCredential = await _auth.signInWithCredential(credential);
       user = userCredential.user;
       if (user == null) return 'User is null';
 
-      final userDoc =
-      _firestore.collection('users').doc(user!.uid);
-
+      final userDoc = _firestore.collection('users').doc(user!.uid);
       final snapshot = await userDoc.get();
 
       if (!snapshot.exists) {
         await userDoc.set({
           'uid': user!.uid,
-          'username':
-          user!.displayName ?? user!.email?.split('@')[0],
+          'username': user!.displayName ?? user!.email?.split('@')[0],
           'email': user!.email,
           'profileImage': user!.photoURL,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
 
-      await fetchUserData();
-      notifyListeners();
+      // تحديث البيانات مباشرة بعد Google Sign-In
+      username = user!.displayName ?? user!.email?.split('@')[0] ?? '';
+      email = user!.email ?? '';
+      profileImageUrl = user!.photoURL ?? '';
+
+      notifyListeners(); // تحديث ProfilePage فورًا
+
       return null;
     } on FirebaseAuthException catch (e) {
       debugPrint("FirebaseAuthException: ${e.code}");
@@ -147,13 +156,13 @@ class AuthProvider extends ChangeNotifier {
   Future<void> fetchUserData() async {
     if (user == null) return;
 
-    final doc =
-    await _firestore.collection('users').doc(user!.uid).get();
-
+    final doc = await _firestore.collection('users').doc(user!.uid).get();
     if (doc.exists) {
       final data = doc.data();
-      username = data?['username'] ?? "No Username";
-      profileImageUrl = data?['profileImage'];
+      username = data?['username'] ?? username;
+      profileImageUrl = data?['profileImage'] ?? profileImageUrl;
+      email = data?['email'] ?? email;
+      notifyListeners();
     }
   }
 
@@ -207,6 +216,7 @@ class AuthProvider extends ChangeNotifier {
 
     user = null;
     username = null;
+    email = null;
     profileImageUrl = null;
 
     notifyListeners();
@@ -219,7 +229,7 @@ class AuthProvider extends ChangeNotifier {
 
   // ================= GETTERS =================
   bool get isLoggedIn => user != null;
-  String get userEmail => user?.email ?? "No Email";
+  String get userEmail => email ?? "No Email";
   String get userName => username ?? "No Username";
   String? get userProfileImage => profileImageUrl;
 }

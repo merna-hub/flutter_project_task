@@ -93,8 +93,7 @@ class CartPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "total: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}"
-                      .tr(),
+                  "total: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}".tr(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -106,8 +105,7 @@ class CartPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            "Proceeding to checkout: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}"
-                                .tr()),
+                            "Proceeding to checkout: \$${(cartProvider.totalPrice + 7).toStringAsFixed(2)}".tr()),
                       ),
                     );
                   },
